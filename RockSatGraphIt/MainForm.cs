@@ -1,32 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using RockSatGraphIt.Properties;
 
-namespace RockSatGraphIt
-{
-    public partial class MainForm : Form
-    {
-
-        public MainForm()
-        {
+namespace RockSatGraphIt {
+    public partial class MainForm : Form {
+        public MainForm() {
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-            if (!Directory.Exists(@"R\"))
-            {
+        private void MainForm_Load(object sender, EventArgs e) {
+            if (!Directory.Exists(@"R\")) {
                 MessageBox.Show(
                     @"Performing first time setup... This could take a few minutes.",
                     Resources.AlertTitle, MessageBoxButtons.OK);
@@ -35,32 +21,30 @@ namespace RockSatGraphIt
             }
             LoadSettings();
         }
-        private void loadDataFileBTN_Click(object sender, EventArgs e)
-        {
+
+        private void loadDataFileBTN_Click(object sender, EventArgs e) {
             var fbd = new OpenFileDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
+            if (fbd.ShowDialog() == DialogResult.OK) {
                 fileNameTXT.Text = fbd.FileName;
             }
         }
-        private void outputDirectoryBTN_Click(object sender, EventArgs e)
-        {
+
+        private void outputDirectoryBTN_Click(object sender, EventArgs e) {
             var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
+            if (fbd.ShowDialog() == DialogResult.OK) {
                 outputDirectoryTXT.Text = fbd.SelectedPath;
             }
         }
-        private void createGraphBTN_Click(object sender, EventArgs e)
-        {
+
+        private void createGraphBTN_Click(object sender, EventArgs e) {
             if (!Ready(true)) return;
 
-            if (!GenerateRScript(Resources.RScript))
-            {
+            if (!GenerateRScript(Resources.RScript)) {
                 MessageBox.Show(Resources.ScriptGenerationError, Resources.AlertTitle,
                     MessageBoxButtons.OK);
                 return;
-            };
+            }
+            ;
 
             var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
 
@@ -69,35 +53,32 @@ namespace RockSatGraphIt
                 : Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x86\RScript.exe";
 
             ExecuteScript(rCodeFilePath, rScriptExecutablePath, "--verbose");
-
         }
 
-        private void LoadSettings()
-        {
-            fileNameTXT.Text = (string)Settings.Default["fileNameTXT"];
-            timeStartTXT.Text = (string)Settings.Default["timeStartTXT"];
-            timeStopTXT.Text = (string)Settings.Default["timeStopTXT"];
-            xAxisTicksTXT.Text = (string)Settings.Default["xAxisTicksTXT"];
-            yMinTXT.Text = (string)Settings.Default["yMinTXT"];
-            yMaxTXT.Text = (string)Settings.Default["yMaxTXT"];
-            fileTypeCMB.Text = (string)Settings.Default["fileTypeCMB"];
-            xAxisLabelTXT.Text = (string)Settings.Default["xAxisLabelTXT"];
-            yAxisLabelTXT.Text = (string)Settings.Default["yAxisLabelTXT"];
-            graphTitleTXT.Text = (string)Settings.Default["graphTitleTXT"];
-            graphSubtitleTXT.Text = (string)Settings.Default["graphSubtitleTXT"];
-            graphTypeCMB.Text = (string)Settings.Default["graphTypeCMB"];
-            graphWidthTXT.Text = (string)Settings.Default["graphWidthTXT"];
-            graphHeightTXT.Text = (string)Settings.Default["graphHeightTXT"];
-            plotColorTXT.Text = (string)Settings.Default["plotColorTXT"];
-            labelColorTXT.Text = (string)Settings.Default["labelColorTXT"];
-            labelSizeTXT.Text = (string)Settings.Default["labelSizeTXT"];
-            outputDirectoryTXT.Text = (string)Settings.Default["outputDirectoryTXT"];
+        private void LoadSettings() {
+            fileNameTXT.Text = (string) Settings.Default["fileNameTXT"];
+            timeStartTXT.Text = (string) Settings.Default["timeStartTXT"];
+            timeStopTXT.Text = (string) Settings.Default["timeStopTXT"];
+            xAxisTicksTXT.Text = (string) Settings.Default["xAxisTicksTXT"];
+            yMinTXT.Text = (string) Settings.Default["yMinTXT"];
+            yMaxTXT.Text = (string) Settings.Default["yMaxTXT"];
+            fileTypeCMB.Text = (string) Settings.Default["fileTypeCMB"];
+            xAxisLabelTXT.Text = (string) Settings.Default["xAxisLabelTXT"];
+            yAxisLabelTXT.Text = (string) Settings.Default["yAxisLabelTXT"];
+            graphTitleTXT.Text = (string) Settings.Default["graphTitleTXT"];
+            graphSubtitleTXT.Text = (string) Settings.Default["graphSubtitleTXT"];
+            graphTypeCMB.Text = (string) Settings.Default["graphTypeCMB"];
+            graphWidthTXT.Text = (string) Settings.Default["graphWidthTXT"];
+            graphHeightTXT.Text = (string) Settings.Default["graphHeightTXT"];
+            plotColorTXT.Text = (string) Settings.Default["plotColorTXT"];
+            labelColorTXT.Text = (string) Settings.Default["labelColorTXT"];
+            labelSizeTXT.Text = (string) Settings.Default["labelSizeTXT"];
+            outputDirectoryTXT.Text = (string) Settings.Default["outputDirectoryTXT"];
 
             if (labelSizeTXT.Text == string.Empty) labelSizeTXT.Text = @"1.0";
         }
-        private void SaveSettings()
-        {
 
+        private void SaveSettings() {
             Settings.Default["fileNameTXT"] = fileNameTXT.Text;
             Settings.Default["timeStartTXT"] = timeStartTXT.Text;
             Settings.Default["timeStopTXT"] = timeStopTXT.Text;
@@ -118,47 +99,43 @@ namespace RockSatGraphIt
             Settings.Default["outputDirectoryTXT"] = outputDirectoryTXT.Text;
             Settings.Default.Save();
         }
-        private void CreateDependencies()
-        {
+
+        private void CreateDependencies() {
             File.WriteAllBytes(@"R.zip", Resources.R);
             ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
             File.Delete("R.zip");
-
         }
 
-        private bool Ready(bool verbose)
-        {
-
-            if (fileNameTXT.Text == string.Empty || timeStartTXT.Text == string.Empty || timeStopTXT.Text == string.Empty ||
+        private bool Ready(bool verbose) {
+            if (fileNameTXT.Text == string.Empty || timeStartTXT.Text == string.Empty ||
+                timeStopTXT.Text == string.Empty ||
                 xAxisTicksTXT.Text == string.Empty || yMinTXT.Text == string.Empty || yMaxTXT.Text == string.Empty ||
-                fileTypeCMB.Text == string.Empty || xAxisLabelTXT.Text == string.Empty || yAxisLabelTXT.Text == string.Empty ||
+                fileTypeCMB.Text == string.Empty || xAxisLabelTXT.Text == string.Empty ||
+                yAxisLabelTXT.Text == string.Empty ||
                 graphTitleTXT.Text == string.Empty || graphTypeCMB.Text == string.Empty ||
-                graphWidthTXT.Text == string.Empty || graphHeightTXT.Text == string.Empty || plotColorTXT.Text == string.Empty ||
-                plotColorTXT.Text == string.Empty || labelSizeTXT.Text == string.Empty || outputDirectoryTXT.Text == string.Empty)
-            {
-
+                graphWidthTXT.Text == string.Empty || graphHeightTXT.Text == string.Empty ||
+                plotColorTXT.Text == string.Empty ||
+                plotColorTXT.Text == string.Empty || labelSizeTXT.Text == string.Empty ||
+                outputDirectoryTXT.Text == string.Empty) {
                 if (verbose) MessageBox.Show(Resources.EmptyFieldsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
 
-            if (!System.IO.Directory.Exists(outputDirectoryTXT.Text))
-            {
-                if (verbose)
-                {
+            if (!Directory.Exists(outputDirectoryTXT.Text)) {
+                if (verbose) {
                     var response = MessageBox.Show(Resources.DirectoryDoesntExist, Resources.AlertTitle,
                         MessageBoxButtons.YesNo);
-                    switch (response)
-                    {
+                    switch (response) {
                         case DialogResult.No:
                             return false;
                         case DialogResult.Yes:
                             Directory.CreateDirectory(outputDirectoryTXT.Text);
-                            if (outputDirectoryTXT.Text.GetLast(1) != @"\") outputDirectoryTXT.Text = outputDirectoryTXT.Text + @"\";
+                            if (outputDirectoryTXT.Text.GetLast(1) != @"\")
+                                outputDirectoryTXT.Text = outputDirectoryTXT.Text + @"\";
                             break;
                     }
                 }
-                else
-                {
+                else {
                     Directory.CreateDirectory(outputDirectoryTXT.Text);
                 }
             }
@@ -171,56 +148,49 @@ namespace RockSatGraphIt
                 !double.TryParse(graphWidthTXT.Text, out result) ||
                 !double.TryParse(graphHeightTXT.Text, out result) ||
                 !double.TryParse(labelSizeTXT.Text, out result) ||
-                !double.TryParse(xAxisTicksTXT.Text, out result))
-            {
+                !double.TryParse(xAxisTicksTXT.Text, out result)) {
                 if (verbose) MessageBox.Show(Resources.InvalidNumber, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            if (double.Parse(timeStartTXT.Text) > double.Parse(timeStopTXT.Text))
-            {
-                if (verbose) MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
+            if (double.Parse(timeStartTXT.Text) > double.Parse(timeStopTXT.Text)) {
+                if (verbose)
+                    MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            if (double.Parse(yMinTXT.Text) > double.Parse(yMaxTXT.Text))
-            {
-                if (verbose) MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
+            if (double.Parse(yMinTXT.Text) > double.Parse(yMaxTXT.Text)) {
+                if (verbose)
+                    MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            if (double.Parse(timeStartTXT.Text) < 0)
-            {
+            if (double.Parse(timeStartTXT.Text) < 0) {
                 if (verbose) MessageBox.Show(Resources.InvalidStartTime, Resources.AlertTitle, MessageBoxButtons.OK);
                 timeStartTXT.Text = @"0";
                 return false;
             }
-            if (Path.GetFileName(fileNameTXT.Text).GetLast(4) != ".csv")
-            {
-                if (verbose) MessageBox.Show(Resources.InvalidFileExtension, Resources.AlertTitle, MessageBoxButtons.OK);
+            if (Path.GetFileName(fileNameTXT.Text).GetLast(4) != ".csv") {
+                if (verbose)
+                    MessageBox.Show(Resources.InvalidFileExtension, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            if (!fileTypeCMB.Items.Contains(fileTypeCMB.Text))
-            {
+            if (!fileTypeCMB.Items.Contains(fileTypeCMB.Text)) {
                 if (verbose) MessageBox.Show(Resources.InvalidOutputType, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            if (!graphTypeCMB.Items.Contains(graphTypeCMB.Text))
-            {
+            if (!graphTypeCMB.Items.Contains(graphTypeCMB.Text)) {
                 if (verbose) MessageBox.Show(Resources.InvalidGraphType, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
 
-
             SaveSettings();
             return true;
         }
-        private bool GenerateRScript(string template)
-        {
 
+        private bool GenerateRScript(string template) {
             var readyScript = FixRScript(template);
             return Safe_FileWrite("RScript.r", FileMode.Create, readyScript);
         }
-        private string FixRScript(string contents)
-        {
 
+        private string FixRScript(string contents) {
             var fixedContents = contents;
             fixedContents = fixedContents.Replace("__Filename__", Path.GetFileName(fileNameTXT.Text));
             fixedContents = fixedContents.Replace("__FullFilename__", FixNonRPath(fileNameTXT.Text));
@@ -243,8 +213,8 @@ namespace RockSatGraphIt
             fixedContents = fixedContents.Replace("__OutputDirectory__", FixNonRPath(outputDirectoryTXT.Text));
             return fixedContents;
         }
-        private string FixNonRPath(string path)
-        {
+
+        private string FixNonRPath(string path) {
             return path.Replace(@"\", "/");
         }
 
@@ -257,13 +227,10 @@ namespace RockSatGraphIt
             return selectedGraphType == "Stair Steps" ? "s" : "n";
         }
 
-        private void ExecuteScript(string scriptPath, string executablePath, string args)
-        {
+        private void ExecuteScript(string scriptPath, string executablePath, string args) {
             var result = string.Empty;
-            try
-            {
-                var info = new ProcessStartInfo
-                {
+            try {
+                var info = new ProcessStartInfo {
                     FileName = executablePath,
                     // ReSharper disable once AssignNullToNotNullAttribute
                     WorkingDirectory = Path.GetDirectoryName(executablePath),
@@ -275,18 +242,16 @@ namespace RockSatGraphIt
                     CreateNoWindow = false
                 };
 
-                using (var proc = new Process())
-                {
+                using (var proc = new Process()) {
                     proc.StartInfo = info;
                     proc.Start();
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 throw new Exception("R Script failed: " + result, ex);
             }
-
         }
+
         private bool Safe_FileWrite(string solutionFilePath, FileMode fileMode, string contents) {
             FileStream fs = null;
             try {
@@ -305,7 +270,6 @@ namespace RockSatGraphIt
                 fs?.Dispose();
             }
             return true;
-
         }
     }
 
