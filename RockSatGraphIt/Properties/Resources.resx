@@ -136,4 +136,28 @@
   <data name="ScriptGenerationError" xml:space="preserve">
     <value>Error generating R script...</value>
   </data>
+  <data name="EmptyFieldsError" xml:space="preserve">
+    <value>All fields must be filled out... Sorry!</value>
+  </data>
+  <data name="DirectoryDoesntExist" xml:space="preserve">
+    <value>Directory does not exist... Create?</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Letters aren't numbers, silly...</value>
+  </data>
+  <data name="NumericalBoundsError" xml:space="preserve">
+    <value>Upper bounds must exceed lower bounds..</value>
+  </data>
+  <data name="InvalidStartTime" xml:space="preserve">
+    <value>Start time must be greater than 0...</value>
+  </data>
+  <data name="InvalidFileExtension" xml:space="preserve">
+    <value>File must end in a .csv extension... sorry!</value>
+  </data>
+  <data name="InvalidOutputType" xml:space="preserve">
+    <value>Invalid output type...</value>
+  </data>
+  <data name="InvalidGraphType" xml:space="preserve">
+    <value>Invalid graph type...</value>
+  </data>
 </root>

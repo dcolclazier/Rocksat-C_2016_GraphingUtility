@@ -17,19 +17,9 @@ namespace RockSatGraphIt
     public partial class MainForm : Form
     {
 
-        private string _fileName;
-
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void CreateDependencies()
-        {
-            File.WriteAllBytes(@"R.zip", Resources.R);
-            ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
-            File.Delete("R.zip");
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -43,17 +33,46 @@ namespace RockSatGraphIt
                 CreateDependencies();
                 MessageBox.Show(@"Setup complete.", Resources.AlertTitle, MessageBoxButtons.OK);
             }
-            LoadDefaults();
+            LoadSettings();
         }
-
-        private bool GenerateRScript(string template)
+        private void loadDataFileBTN_Click(object sender, EventArgs e)
         {
+            var fbd = new OpenFileDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                fileNameTXT.Text = fbd.FileName;
+            }
+        }
+        private void outputDirectoryBTN_Click(object sender, EventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                outputDirectoryTXT.Text = fbd.SelectedPath;
+            }
+        }
+        private void createGraphBTN_Click(object sender, EventArgs e)
+        {
+            if (!Ready(true)) return;
 
-            var readyScript = FixRScript(template);
-            return Safe_FileWrite("RScript.r", FileMode.Create, readyScript);
+            if (!GenerateRScript(Resources.RScript))
+            {
+                MessageBox.Show(Resources.ScriptGenerationError, Resources.AlertTitle,
+                    MessageBoxButtons.OK);
+                return;
+            };
+
+            var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
+
+            var rScriptExecutablePath = Environment.Is64BitOperatingSystem
+                ? Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x64\RScript.exe"
+                : Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x86\RScript.exe";
+
+            ExecuteScript(rCodeFilePath, rScriptExecutablePath, "--verbose");
+
         }
 
-        private void LoadDefaults()
+        private void LoadSettings()
         {
             fileNameTXT.Text = (string)Settings.Default["fileNameTXT"];
             timeStartTXT.Text = (string)Settings.Default["timeStartTXT"];
@@ -75,9 +94,8 @@ namespace RockSatGraphIt
             outputDirectoryTXT.Text = (string)Settings.Default["outputDirectoryTXT"];
 
             if (labelSizeTXT.Text == string.Empty) labelSizeTXT.Text = @"1.0";
-            _fileName = Path.GetFileName(fileNameTXT.Text);
         }
-        private void SaveSettings(object sender, EventArgs eventArgs)
+        private void SaveSettings()
         {
 
             Settings.Default["fileNameTXT"] = fileNameTXT.Text;
@@ -100,113 +118,26 @@ namespace RockSatGraphIt
             Settings.Default["outputDirectoryTXT"] = outputDirectoryTXT.Text;
             Settings.Default.Save();
         }
-        private string FixRScript(string cont)
+        private void CreateDependencies()
         {
+            File.WriteAllBytes(@"R.zip", Resources.R);
+            ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
+            File.Delete("R.zip");
 
-            var contents = cont;
-            contents = contents.Replace("__Filename__", Path.GetFileName(fileNameTXT.Text));
-            contents = contents.Replace("__FullFilename__", FixNonRPath(fileNameTXT.Text));
-            contents = contents.Replace("__TimeStart__", timeStartTXT.Text);
-            contents = contents.Replace("__TimeStop__", timeStopTXT.Text);
-            contents = contents.Replace("__TickPeriod__", xAxisTicksTXT.Text);
-            contents = contents.Replace("__yMinimum__", yMinTXT.Text);
-            contents = contents.Replace("__yMaximum__", yMaxTXT.Text);
-            contents = contents.Replace("__OutputFileType__", fileTypeCMB.Text);
-            contents = contents.Replace("__xLabel__", xAxisLabelTXT.Text);
-            contents = contents.Replace("__yLabel__", yAxisLabelTXT.Text);
-            contents = contents.Replace("__Title__", graphTitleTXT.Text);
-            contents = contents.Replace("__Subtitle__", graphSubtitleTXT.Text);
-            contents = contents.Replace("__GraphType__", GetGraphType(graphTypeCMB.Text));
-            contents = contents.Replace("__GraphWidth__", graphWidthTXT.Text);
-            contents = contents.Replace("__GraphHeight__", graphHeightTXT.Text);
-            contents = contents.Replace("__PlotColor__", plotColorTXT.Text);
-            contents = contents.Replace("__LabelColor__", labelColorTXT.Text);
-            contents = contents.Replace("__LabelSize__", labelSizeTXT.Text);
-            contents = contents.Replace("__OutputDirectory__", FixNonRPath(outputDirectoryTXT.Text));
-            return contents;
         }
-        private string FixNonRPath(string path) {
-            return path.Replace(@"\", "/");
-        }
-        private string GetGraphType(string selectedGraphType)
+
+        private bool Ready(bool verbose)
         {
-            if (selectedGraphType == "Points") return "p";
-            else if (selectedGraphType == "Line") return "l";
-            else if (selectedGraphType == "Points + Line") return "b";
-            else if (selectedGraphType == "Overplotted") return "o";
-            else if (selectedGraphType == "Histogram") return "h";
-            else if (selectedGraphType == "Stair Steps") return "s";
-            else return "n";
-        }
-
-        private void loadDataFileBTN_Click(object sender, EventArgs e)
-        {
-            var fbd = new OpenFileDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                fileNameTXT.Text = fbd.FileName;
-                _fileName = fbd.SafeFileName;
-            }
-        }
-
-        private void createGraphBTN_Click(object sender, EventArgs e)
-        {
-            if (!Ready(true)) return;
-
-            if (!GenerateRScript(Resources.RScript))
-            {
-                MessageBox.Show(Resources.ScriptGenerationError, Resources.AlertTitle,
-                    MessageBoxButtons.OK);
-                return;
-            };
-
-            var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
-
-            var rScriptExecutablePath = Environment.Is64BitOperatingSystem
-                ? Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x64\RScript.exe"
-                : Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x86\RScript.exe";
-
-            ExecuteScript(rCodeFilePath,rScriptExecutablePath,"--verbose");
-
-        }
-
-        private void ExecuteScript(string scriptPath, string executablePath, string args = "--verbose")
-        {
-            var result = string.Empty;
-            try {
-                var info = new ProcessStartInfo {
-                    FileName = executablePath,
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    WorkingDirectory = Path.GetDirectoryName(executablePath),
-                    Arguments = scriptPath + " " + args,
-                    RedirectStandardInput = false,
-                    RedirectStandardOutput = false,
-                    ErrorDialog = false,
-                    UseShellExecute = false,
-                    CreateNoWindow = false
-                };
-
-                using (var proc = new Process()) {
-                    proc.StartInfo = info;
-                    proc.Start();
-                }
-            }
-            catch (Exception ex) {
-                throw new Exception("R Script failed: " + result, ex);
-            }
-
-        }
-
-        private bool Ready(bool verbose) {
 
             if (fileNameTXT.Text == string.Empty || timeStartTXT.Text == string.Empty || timeStopTXT.Text == string.Empty ||
                 xAxisTicksTXT.Text == string.Empty || yMinTXT.Text == string.Empty || yMaxTXT.Text == string.Empty ||
                 fileTypeCMB.Text == string.Empty || xAxisLabelTXT.Text == string.Empty || yAxisLabelTXT.Text == string.Empty ||
-                graphTitleTXT.Text == string.Empty || graphSubtitleTXT.Text == string.Empty || graphTypeCMB.Text == string.Empty ||
+                graphTitleTXT.Text == string.Empty || graphTypeCMB.Text == string.Empty ||
                 graphWidthTXT.Text == string.Empty || graphHeightTXT.Text == string.Empty || plotColorTXT.Text == string.Empty ||
-                plotColorTXT.Text == string.Empty || labelSizeTXT.Text == string.Empty || outputDirectoryTXT.Text == string.Empty) {
+                plotColorTXT.Text == string.Empty || labelSizeTXT.Text == string.Empty || outputDirectoryTXT.Text == string.Empty)
+            {
 
-                if (verbose) MessageBox.Show("All fields must be filled out... Sorry!", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.EmptyFieldsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
 
@@ -214,7 +145,7 @@ namespace RockSatGraphIt
             {
                 if (verbose)
                 {
-                    var response = MessageBox.Show("Directory does not exist... Create?", Resources.AlertTitle,
+                    var response = MessageBox.Show(Resources.DirectoryDoesntExist, Resources.AlertTitle,
                         MessageBoxButtons.YesNo);
                     switch (response)
                     {
@@ -232,6 +163,8 @@ namespace RockSatGraphIt
                 }
             }
 
+            if (outputDirectoryTXT.Text.GetLast(1) != @"\") outputDirectoryTXT.Text += @"\";
+
             double result;
             if (!double.TryParse(yMinTXT.Text, out result) ||
                 !double.TryParse(yMaxTXT.Text, out result) ||
@@ -240,87 +173,144 @@ namespace RockSatGraphIt
                 !double.TryParse(labelSizeTXT.Text, out result) ||
                 !double.TryParse(xAxisTicksTXT.Text, out result))
             {
-                if (verbose) MessageBox.Show("Letters aren't numbers, silly...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.InvalidNumber, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             if (double.Parse(timeStartTXT.Text) > double.Parse(timeStopTXT.Text))
             {
-                if (verbose) MessageBox.Show("Start time must be before stop time...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             if (double.Parse(yMinTXT.Text) > double.Parse(yMaxTXT.Text))
             {
-                if (verbose) MessageBox.Show("Y min must be lower than Y max...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.NumericalBoundsError, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             if (double.Parse(timeStartTXT.Text) < 0)
             {
-                if (verbose) MessageBox.Show("Start time must be greater than 0...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.InvalidStartTime, Resources.AlertTitle, MessageBoxButtons.OK);
                 timeStartTXT.Text = @"0";
                 return false;
             }
             if (Path.GetFileName(fileNameTXT.Text).GetLast(4) != ".csv")
             {
-                if (verbose) MessageBox.Show("File must end in a .csv extension... sorry!", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.InvalidFileExtension, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             if (!fileTypeCMB.Items.Contains(fileTypeCMB.Text))
             {
-                if (verbose) MessageBox.Show("Invalid output type...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.InvalidOutputType, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             if (!graphTypeCMB.Items.Contains(graphTypeCMB.Text))
             {
-                if (verbose) MessageBox.Show("Invalid graph type...", Resources.AlertTitle, MessageBoxButtons.OK);
+                if (verbose) MessageBox.Show(Resources.InvalidGraphType, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
 
-            
-            SaveSettings(null, null);
+
+            SaveSettings();
             return true;
         }
-
-        private bool Safe_FileWrite(string solutionFilePath, FileMode fileMode, string contents)
+        private bool GenerateRScript(string template)
         {
-            FileStream fs = null;
+
+            var readyScript = FixRScript(template);
+            return Safe_FileWrite("RScript.r", FileMode.Create, readyScript);
+        }
+        private string FixRScript(string contents)
+        {
+
+            var fixedContents = contents;
+            fixedContents = fixedContents.Replace("__Filename__", Path.GetFileName(fileNameTXT.Text));
+            fixedContents = fixedContents.Replace("__FullFilename__", FixNonRPath(fileNameTXT.Text));
+            fixedContents = fixedContents.Replace("__TimeStart__", timeStartTXT.Text);
+            fixedContents = fixedContents.Replace("__TimeStop__", timeStopTXT.Text);
+            fixedContents = fixedContents.Replace("__TickPeriod__", xAxisTicksTXT.Text);
+            fixedContents = fixedContents.Replace("__yMinimum__", yMinTXT.Text);
+            fixedContents = fixedContents.Replace("__yMaximum__", yMaxTXT.Text);
+            fixedContents = fixedContents.Replace("__OutputFileType__", fileTypeCMB.Text);
+            fixedContents = fixedContents.Replace("__xLabel__", xAxisLabelTXT.Text);
+            fixedContents = fixedContents.Replace("__yLabel__", yAxisLabelTXT.Text);
+            fixedContents = fixedContents.Replace("__Title__", graphTitleTXT.Text);
+            fixedContents = fixedContents.Replace("__Subtitle__", graphSubtitleTXT.Text);
+            fixedContents = fixedContents.Replace("__GraphType__", GetGraphType(graphTypeCMB.Text));
+            fixedContents = fixedContents.Replace("__GraphWidth__", graphWidthTXT.Text);
+            fixedContents = fixedContents.Replace("__GraphHeight__", graphHeightTXT.Text);
+            fixedContents = fixedContents.Replace("__PlotColor__", plotColorTXT.Text);
+            fixedContents = fixedContents.Replace("__LabelColor__", labelColorTXT.Text);
+            fixedContents = fixedContents.Replace("__LabelSize__", labelSizeTXT.Text);
+            fixedContents = fixedContents.Replace("__OutputDirectory__", FixNonRPath(outputDirectoryTXT.Text));
+            return fixedContents;
+        }
+        private string FixNonRPath(string path)
+        {
+            return path.Replace(@"\", "/");
+        }
+
+        private string GetGraphType(string selectedGraphType) {
+            if (selectedGraphType == "Points") return "p";
+            if (selectedGraphType == "Line") return "l";
+            if (selectedGraphType == "Points + Line") return "b";
+            if (selectedGraphType == "Overplotted") return "o";
+            if (selectedGraphType == "Histogram") return "h";
+            return selectedGraphType == "Stair Steps" ? "s" : "n";
+        }
+
+        private void ExecuteScript(string scriptPath, string executablePath, string args)
+        {
+            var result = string.Empty;
             try
             {
-                fs = new FileStream(solutionFilePath, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
-                using (TextWriter tw = new StreamWriter(fs))
+                var info = new ProcessStartInfo
                 {
+                    FileName = executablePath,
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    WorkingDirectory = Path.GetDirectoryName(executablePath),
+                    Arguments = scriptPath + " " + args,
+                    RedirectStandardInput = false,
+                    RedirectStandardOutput = false,
+                    ErrorDialog = false,
+                    UseShellExecute = false,
+                    CreateNoWindow = false
+                };
+
+                using (var proc = new Process())
+                {
+                    proc.StartInfo = info;
+                    proc.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("R Script failed: " + result, ex);
+            }
+
+        }
+        private bool Safe_FileWrite(string solutionFilePath, FileMode fileMode, string contents) {
+            FileStream fs = null;
+            try {
+                fs = new FileStream(solutionFilePath, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
+                using (TextWriter tw = new StreamWriter(fs)) {
                     fs = null;
                     tw.Write(contents);
                     tw.Close();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 MessageBox.Show(e.Message + e.InnerException?.Message, Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
-            finally
-            {
+            finally {
                 fs?.Dispose();
             }
             return true;
 
         }
-
-        private void outputDirectoryBTN_Click(object sender, EventArgs e)
-        {
-            var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                outputDirectoryTXT.Text = fbd.SelectedPath;
-            }
-        }
     }
 
-    public static class StringExtension
-    {
-        public static string GetLast(this string source, int tailLength)
-        {
-
+    public static class StringExtension {
+        public static string GetLast(this string source, int tailLength) {
             return tailLength >= source.Length ? source : source.Substring(source.Length - tailLength);
         }
     }

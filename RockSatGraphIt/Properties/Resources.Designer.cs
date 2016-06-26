@@ -70,6 +70,69 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory does not exist... Create?.
+        /// </summary>
+        internal static string DirectoryDoesntExist {
+            get {
+                return ResourceManager.GetString("DirectoryDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All fields must be filled out... Sorry!.
+        /// </summary>
+        internal static string EmptyFieldsError {
+            get {
+                return ResourceManager.GetString("EmptyFieldsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File must end in a .csv extension... sorry!.
+        /// </summary>
+        internal static string InvalidFileExtension {
+            get {
+                return ResourceManager.GetString("InvalidFileExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid graph type....
+        /// </summary>
+        internal static string InvalidGraphType {
+            get {
+                return ResourceManager.GetString("InvalidGraphType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Letters aren&apos;t numbers, silly....
+        /// </summary>
+        internal static string InvalidNumber {
+            get {
+                return ResourceManager.GetString("InvalidNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid output type....
+        /// </summary>
+        internal static string InvalidOutputType {
+            get {
+                return ResourceManager.GetString("InvalidOutputType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start time must be greater than 0....
+        /// </summary>
+        internal static string InvalidStartTime {
+            get {
+                return ResourceManager.GetString("InvalidStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap MissionPatch {
@@ -86,6 +149,15 @@ namespace RockSatGraphIt.Properties {
             get {
                 object obj = ResourceManager.GetObject("nasa", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upper bounds must exceed lower bounds...
+        /// </summary>
+        internal static string NumericalBoundsError {
+            get {
+                return ResourceManager.GetString("NumericalBoundsError", resourceCulture);
             }
         }
         
