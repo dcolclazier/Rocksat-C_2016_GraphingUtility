@@ -27,7 +27,7 @@ namespace RockSatGraphIt
         private void CreateDependencies()
         {
             File.WriteAllBytes(@"R.zip", Resources.R);
-            ZipFile.ExtractToDirectory(@"R.zip", @"R\");
+            ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
             File.Delete("R.zip");
 
         }
@@ -163,14 +163,14 @@ namespace RockSatGraphIt
             var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
 
             var rScriptExecutablePath = Environment.Is64BitOperatingSystem
-                ? Directory.GetCurrentDirectory() + @"\R\R\R-3.3.1\bin\x64\RScript.exe"
-                : Directory.GetCurrentDirectory() + @"\R\R\R-3.3.1\bin\x86\RScript.exe";
+                ? Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x64\RScript.exe"
+                : Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x86\RScript.exe";
 
-            RunProcess(rCodeFilePath,rScriptExecutablePath,"--verbose");
+            ExecuteScript(rCodeFilePath,rScriptExecutablePath,"--verbose");
 
         }
 
-        private void RunProcess(string scriptPath, string executablePath, string args = "--verbose")
+        private void ExecuteScript(string scriptPath, string executablePath, string args = "--verbose")
         {
             var result = string.Empty;
             try {
@@ -274,6 +274,8 @@ namespace RockSatGraphIt
                 if (verbose) MessageBox.Show("Invalid graph type...", Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
+
+            
             SaveSettings(null, null);
             return true;
         }
