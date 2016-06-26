@@ -1,0 +1,172 @@
+##RockSat-C 2016 Graphing Utility
+##Author: David Colclazier
+##GPL V2
+##RScript.exe source is available at https://github.com/wch/r-source
+##To Run, tweak the tweakables, select all (Ctrl-A) and press (Ctrl-R) within RGui.
+##Download RGui from... INSERT LINK
+##RScript.exe is licensed by
+
+#clear variables from previous session (dev-use only I think)
+rm(list = setdiff(ls(), lsf.str()))
+
+cat("Beginning RockSat Graph Creation Execution\n");
+
+#TWEAKABLE VARIABLES - INPUT
+fileName = "__Filename__"                       #best to use whole data file to avoid ms range not existing...
+filePath = "__FullFilename__"
+timeStart = __TimeStart__                       #start time in ms
+timeStop = __TimeStop__	            			#stop time in ms
+xAxisTickFrequency  = __TickPeriod__      		#ms between each tick - FIX THIS!!!!!
+
+#TWEAKABLE VARIABLES - OUTPUT
+yMin = __yMinimum__	                           	#minimum y bounds (e.g. -12g)
+yMax = __yMaximum__	                        	#max y bounds (e.g. 7 ticks)
+outputFileExtension = "__OutputFileType__"    	#jpeg, pdf, or png
+xAxisLabel = "__xLabel__"                    	#label for x-Axis
+yAxisLabel = "__yLabel__"                    	#label for y-Axis 
+graphTitle = "__Title__"                     	#title for graph
+graphSubtitle = "__Subtitle__"                	#subtitle for graph
+graphType = "__GraphType__"                   	#p = points, l = line, b = both, o = overplotted, h = histogram or high-density, n = none, s,S = stair
+plotWidth = __GraphWidth__                      #changes width of pdf plot (physical size in inches... larger width, smaller time-range = higher resolution)
+plotHeight = __GraphHeight__                   	#changes height of pdf plot (physical size in inches)
+plotColor = "__PlotColor__"	                 	#http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+labelColor = "__LabelColor__"               	#http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+labelSize = __LabelSize__                      	#size of x-and y-axis labels, relative to the (default) setting of cex.
+outputDirectory = "__OutputDirectory__"
+
+cat("All graph information received - continuing.\n");
+
+##################################################################################################################
+############    MESS WITH THE STUFF BELOW AT YOUR OWN RISK... I'D MAKE A BACKUP BEFORE CONTINUING.   #############
+##################################################################################################################
+
+
+########################################
+##### BEGIN FUNCTION DECLARATIONS ######
+########################################
+
+### used when creating output file name - reassigned when we figure out what type of data we're working with
+### Global variable... accessed internally, warning!
+fileBase <- "unknown"
+
+
+### determines the function to be used based on the file type we've provided
+getFileType <- function(extension){
+	if(extension == "pdf")  { return(pdf) }
+	if(extension == "jpeg") { return(jpeg) }
+	if(extension == "png")  { return(png) }
+}
+
+
+### returns a list containing the data for the respective column - reaches into the .csv
+getColumn <- function(column){
+	if(column== "t") { return(data$t) }
+	if(column== "x") { return(data$x) }
+	if(column== "y") { return(data$y) }
+	if(column== "z") { return(data$z) }
+	if(column== "s") { return(data$s) }
+	if(column== "u") { return(data$u) }
+}
+
+### returns true if the file we're working with is in fact geiger counter data
+isGeigerData <- function(){
+	if(substring(fileName,1,6)=="geiger") {
+		fileBase <<- "geiger"
+		return(TRUE)
+	}
+	else { return(FALSE) }
+}
+
+### returns true if the file we're working with is in fact accelerometer data
+isAccelData <- function() {
+	if(substring(fileName,1,5)=="accel") {
+		fileBase <<- "accel";
+		return(TRUE);
+	}
+	else { return(FALSE) }
+}
+
+### returns an output filename(string) containing time-range stamp, etc.
+getOutputFileName <- function(mod) {
+	return(paste(outputDirectory, fileBase,"-",mod,"_",timeStart,"-",timeStop,".",outputFileExtension,sep=""));
+}
+
+readkey <- function() {
+    cat ("Press [enter] to continue")
+    line <- readline()
+}
+
+### actually plots the data
+graphIt <- function(x, y, xL, yL, pT, alph, label){
+
+	##get the fileType (pdf, png) we're going to be outputing to
+	fileType <- getFileType(outputFileExtension);
+		
+	##get our output fileName
+	outputFileName = getOutputFileName(label);
+
+	##open a file of the type and filename we found, with the physical dimensions we've provided.
+	##issues with big numbers on png and jpeg - use pdf if you can for large amounts of data.
+	if(outputFileExtension == "pdf"){
+		cat("Creating output file with .pdf extension.\n");
+		fileType (outputFileName, width=plotWidth, height=plotHeight);
+	}
+	else if(outputFileExtension == "jpeg"){
+		cat("Creating output file with .jpeg extension.\n");
+		fileType (outputFileName, width=plotWidth, height=plotHeight, units = "in", res = 600);
+	}
+	else if(outputFileExtension == "png"){
+		cat("Creating output file with .png extension.\n");
+		fileType (outputFileName, width=plotWidth, height=plotHeight, units = "in", res = 600);
+	}
+	
+	period = (timeStop - timeStart)/xAxisTickFrequency
+	plot(x, y, xlim = xL, ylim = yL, type = pT, col = plotColor, pch=".", cex=2, main = graphTitle, 
+			sub = graphSubtitle, xlab = xAxisLabel, ylab = yAxisLabel, xaxp = c(timeStart,timeStop,period),
+			col.lab = labelColor, cex.lab = labelSize);
+	
+	##draws a grid on the graph
+	cat("Adding grid to graph...");
+	grid();
+	cat(" done.\n")
+
+	##closes the file
+	dev.off();
+	cat("File saved successfully.\n");
+}
+######################################
+##### END FUNCTION DECLARATIONS ######
+######################################
+
+
+################################
+####### MAIN SCRIPT BODY #######
+################################
+cat("Importing data...");
+data <- read.table(filePath,header=T,sep=",");
+cat(" done.\n");
+if(isAccelData()){
+	cat("Graphing acceleration data for the x axis... ");
+	graphIt (getColumn("t"), getColumn("x"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "x");
+	cat("Graphing acceleration data for the y axis... ");
+	graphIt (getColumn("t"), getColumn("y"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "y");
+	cat("Graphing acceleration data for the z axis... ");
+	graphIt (getColumn("t"), getColumn("z"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "z");
+}
+if(isGeigerData())
+{
+	cat("Graphing shielded geiger data...");
+	graphIt (getColumn("t"), getColumn("s"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "s");
+	cat("Graphing unshielded geiger data...");
+	graphIt (getColumn("t"), getColumn("u"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "u");
+}
+readkey();
+################################
+##### END MAIN SCRIPT BODY #####
+################################
+
+
+
+
+
+
