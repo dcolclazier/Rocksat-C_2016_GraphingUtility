@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Windows.Forms;
@@ -20,6 +21,8 @@ namespace RockSatGraphIt {
                 MessageBox.Show(@"Setup complete.", Resources.AlertTitle, MessageBoxButtons.OK);
             }
             LoadSettings();
+
+            consoleRTB.ReadOnly = true;
         }
 
         private void loadDataFileBTN_Click(object sender, EventArgs e) {
@@ -44,7 +47,6 @@ namespace RockSatGraphIt {
                     MessageBoxButtons.OK);
                 return;
             }
-            ;
 
             var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
 
@@ -228,28 +230,57 @@ namespace RockSatGraphIt {
         }
 
         private void ExecuteScript(string scriptPath, string executablePath, string args) {
-            var result = string.Empty;
-            try {
-                var info = new ProcessStartInfo {
-                    FileName = executablePath,
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    WorkingDirectory = Path.GetDirectoryName(executablePath),
-                    Arguments = scriptPath + " " + args,
-                    RedirectStandardInput = false,
-                    RedirectStandardOutput = false,
-                    ErrorDialog = false,
-                    UseShellExecute = false,
-                    CreateNoWindow = false
-                };
+            //Create our process start info
+            var processStartInfo = new ProcessStartInfo {
+                FileName = executablePath,
+                // ReSharper disable once AssignNullToNotNullAttribute
+                WorkingDirectory = Path.GetDirectoryName(executablePath),
+                Arguments = scriptPath + " " + args,
+                RedirectStandardInput = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                ErrorDialog = false,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
-                using (var proc = new Process()) {
-                    proc.StartInfo = info;
-                    proc.Start();
-                }
+            //Create our process, register process events
+            var proc = new Process {
+                EnableRaisingEvents = true,
+                StartInfo = processStartInfo
+            };
+            proc.Exited += ExecutionFinished;
+            proc.OutputDataReceived += LogOutputData;
+
+            //Disable Create graph button so we can't do this more than once at a time
+            createGraphBTN.Enabled = false;
+
+            //Start the process.
+            try {
+                proc.Start();
             }
             catch (Exception ex) {
-                throw new Exception("R Script failed: " + result, ex);
+                WriteOutput("Failed: " + ex + Environment.NewLine, Color.Red);
             }
+
+            proc.BeginOutputReadLine();
+
+        }
+
+        private void LogOutputData(object sender, DataReceivedEventArgs e) {
+            WriteOutput(e.Data, Color.DarkBlue);
+        }
+
+        private void WriteOutput(string s, Color color) {
+            s += "\n";
+            Invoke((Action) (() => {
+                consoleRTB.SelectionColor = color;
+                consoleRTB.SelectedText += s;
+            }));
+        }
+
+        private void ExecutionFinished(object sender, EventArgs e) {
+            Invoke((Action) (() => { createGraphBTN.Enabled = true; }));
         }
 
         private bool Safe_FileWrite(string solutionFilePath, FileMode fileMode, string contents) {

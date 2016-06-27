@@ -9,30 +9,43 @@
 #clear variables from previous session (dev-use only I think)
 rm(list = setdiff(ls(), lsf.str()))
 
-cat("Beginning RockSat Graph Creation Execution\n");
+cat("Beginning Graph Creation... Please wait.\n");
 
 #TWEAKABLE VARIABLES - INPUT
+
 fileName = "__Filename__"                       #best to use whole data file to avoid ms range not existing...
 filePath = "__FullFilename__"
+cat(paste("Input data file path:", filePath,"\n"))
 timeStart = __TimeStart__                       #start time in ms
 timeStop = __TimeStop__	            			#stop time in ms
-xAxisTickFrequency  = __TickPeriod__      		#ms between each tick - FIX THIS!!!!!
+cat(paste("Time Range:",timeStart,"ms -",timeStop,"ms\n"));
+tickPeriod  = __TickPeriod__      		#ms between each tick 
+cat(paste("Number of milleseconds between each tick mark on x-axis:", tickPeriod,"\n"))
+
 
 #TWEAKABLE VARIABLES - OUTPUT
+
 yMin = __yMinimum__	                           	#minimum y bounds (e.g. -12g)
 yMax = __yMaximum__	                        	#max y bounds (e.g. 7 ticks)
+cat(paste("y-Axis Bounds:",yMin,"-",yMax,"\n"));
 outputFileExtension = "__OutputFileType__"    	#jpeg, pdf, or png
+cat(paste("Output file type:",outputFileExtension,"\n"));
+
 xAxisLabel = "__xLabel__"                    	#label for x-Axis
 yAxisLabel = "__yLabel__"                    	#label for y-Axis 
 graphTitle = "__Title__"                     	#title for graph
 graphSubtitle = "__Subtitle__"                	#subtitle for graph
+
 graphType = "__GraphType__"                   	#p = points, l = line, b = both, o = overplotted, h = histogram or high-density, n = none, s,S = stair
+cat(paste("Graph type:",graphType,"\n"));
+
 plotWidth = __GraphWidth__                      #changes width of pdf plot (physical size in inches... larger width, smaller time-range = higher resolution)
 plotHeight = __GraphHeight__                   	#changes height of pdf plot (physical size in inches)
 plotColor = "__PlotColor__"	                 	#http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 labelColor = "__LabelColor__"               	#http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 labelSize = __LabelSize__                      	#size of x-and y-axis labels, relative to the (default) setting of cex.
 outputDirectory = "__OutputDirectory__"
+outputFileName = ""
 
 cat("All graph information received - continuing.\n");
 
@@ -88,13 +101,10 @@ isAccelData <- function() {
 
 ### returns an output filename(string) containing time-range stamp, etc.
 getOutputFileName <- function(mod) {
-	return(paste(outputDirectory, fileBase,"-",mod,"_",timeStart,"-",timeStop,".",outputFileExtension,sep=""));
+	outputFileName <<-  paste(outputDirectory, fileBase,"-",mod,"_",timeStart,"-",timeStop,"_",graphType,".",outputFileExtension,sep="")
+	return(outputFileName);
 }
 
-readkey <- function() {
-    cat ("Press [enter] to continue")
-    line <- readline()
-}
 
 ### actually plots the data
 graphIt <- function(x, y, xL, yL, pT, alph, label){
@@ -104,6 +114,8 @@ graphIt <- function(x, y, xL, yL, pT, alph, label){
 		
 	##get our output fileName
 	outputFileName = getOutputFileName(label);
+
+	fullgraphTitle = paste(graphTitle,"(",label,")");
 
 	##open a file of the type and filename we found, with the physical dimensions we've provided.
 	##issues with big numbers on png and jpeg - use pdf if you can for large amounts of data.
@@ -120,19 +132,19 @@ graphIt <- function(x, y, xL, yL, pT, alph, label){
 		fileType (outputFileName, width=plotWidth, height=plotHeight, units = "in", res = 600);
 	}
 	
-	period = (timeStop - timeStart)/xAxisTickFrequency
-	plot(x, y, xlim = xL, ylim = yL, type = pT, col = plotColor, pch=".", cex=2, main = graphTitle, 
+	period = (timeStop - timeStart)/tickPeriod;
+	plot(x, y, xlim = xL, ylim = yL, type = pT, col = plotColor, pch=".", cex=2, main = fullgraphTitle, 
 			sub = graphSubtitle, xlab = xAxisLabel, ylab = yAxisLabel, xaxp = c(timeStart,timeStop,period),
 			col.lab = labelColor, cex.lab = labelSize);
 	
 	##draws a grid on the graph
-	cat("Adding grid to graph...");
+	cat("Adding grid to graph...\n");
 	grid();
-	cat(" done.\n")
+	
 
 	##closes the file
 	dev.off();
-	cat("File saved successfully.\n");
+	cat(paste("File saved successfully to",outputFileName,"\n"));
 }
 ######################################
 ##### END FUNCTION DECLARATIONS ######
@@ -142,25 +154,25 @@ graphIt <- function(x, y, xL, yL, pT, alph, label){
 ################################
 ####### MAIN SCRIPT BODY #######
 ################################
-cat("Importing data...");
+cat(paste("Importing data from",filePath,"... could take a few minutes...\n"));
 data <- read.table(filePath,header=T,sep=",");
-cat(" done.\n");
+cat("Data import complete.\n");
 if(isAccelData()){
-	cat("Graphing acceleration data for the x axis... ");
+	cat("Graphing acceleration data for the x axis... \n");
 	graphIt (getColumn("t"), getColumn("x"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "x");
-	cat("Graphing acceleration data for the y axis... ");
+	cat("Graphing acceleration data for the y axis... \n");
 	graphIt (getColumn("t"), getColumn("y"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "y");
-	cat("Graphing acceleration data for the z axis... ");
+	cat("Graphing acceleration data for the z axis... \n");
 	graphIt (getColumn("t"), getColumn("z"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "z");
 }
 if(isGeigerData())
 {
-	cat("Graphing shielded geiger data...");
+	cat("Graphing shielded geiger data...\n");
 	graphIt (getColumn("t"), getColumn("s"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "s");
-	cat("Graphing unshielded geiger data...");
+	cat("Graphing unshielded geiger data...\n");
 	graphIt (getColumn("t"), getColumn("u"), c(timeStart,timeStop), c(yMin, yMax), graphType , alpha, "u");
 }
-readkey();
+
 ################################
 ##### END MAIN SCRIPT BODY #####
 ################################

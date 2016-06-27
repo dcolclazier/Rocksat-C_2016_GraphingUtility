@@ -71,6 +71,7 @@
             this.outputDirectoryBTN = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.createGraphBTN = new System.Windows.Forms.Button();
+            this.consoleRTB = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -251,21 +252,21 @@
             this.fileNameTXT.Location = new System.Drawing.Point(123, 23);
             this.fileNameTXT.Name = "fileNameTXT";
             this.fileNameTXT.Size = new System.Drawing.Size(505, 20);
-            this.fileNameTXT.TabIndex = 19;
+            this.fileNameTXT.TabIndex = 0;
             // 
             // outputDirectoryTXT
             // 
             this.outputDirectoryTXT.Location = new System.Drawing.Point(123, 49);
             this.outputDirectoryTXT.Name = "outputDirectoryTXT";
             this.outputDirectoryTXT.Size = new System.Drawing.Size(505, 20);
-            this.outputDirectoryTXT.TabIndex = 20;
+            this.outputDirectoryTXT.TabIndex = 1;
             // 
             // timeStartTXT
             // 
             this.timeStartTXT.Location = new System.Drawing.Point(123, 135);
             this.timeStartTXT.Name = "timeStartTXT";
             this.timeStartTXT.Size = new System.Drawing.Size(99, 20);
-            this.timeStartTXT.TabIndex = 21;
+            this.timeStartTXT.TabIndex = 5;
             // 
             // fileTypeCMB
             // 
@@ -277,42 +278,42 @@
             this.fileTypeCMB.Location = new System.Drawing.Point(123, 108);
             this.fileTypeCMB.Name = "fileTypeCMB";
             this.fileTypeCMB.Size = new System.Drawing.Size(99, 21);
-            this.fileTypeCMB.TabIndex = 22;
+            this.fileTypeCMB.TabIndex = 4;
             // 
             // timeStopTXT
             // 
             this.timeStopTXT.Location = new System.Drawing.Point(123, 161);
             this.timeStopTXT.Name = "timeStopTXT";
             this.timeStopTXT.Size = new System.Drawing.Size(99, 20);
-            this.timeStopTXT.TabIndex = 23;
+            this.timeStopTXT.TabIndex = 6;
             // 
             // xAxisTicksTXT
             // 
             this.xAxisTicksTXT.Location = new System.Drawing.Point(123, 187);
             this.xAxisTicksTXT.Name = "xAxisTicksTXT";
             this.xAxisTicksTXT.Size = new System.Drawing.Size(99, 20);
-            this.xAxisTicksTXT.TabIndex = 24;
+            this.xAxisTicksTXT.TabIndex = 7;
             // 
             // graphTitleTXT
             // 
             this.graphTitleTXT.Location = new System.Drawing.Point(123, 318);
             this.graphTitleTXT.Name = "graphTitleTXT";
             this.graphTitleTXT.Size = new System.Drawing.Size(99, 20);
-            this.graphTitleTXT.TabIndex = 25;
+            this.graphTitleTXT.TabIndex = 13;
             // 
             // yMinTXT
             // 
             this.yMinTXT.Location = new System.Drawing.Point(127, 213);
             this.yMinTXT.Name = "yMinTXT";
             this.yMinTXT.Size = new System.Drawing.Size(33, 20);
-            this.yMinTXT.TabIndex = 26;
+            this.yMinTXT.TabIndex = 8;
             // 
             // yMaxTXT
             // 
             this.yMaxTXT.Location = new System.Drawing.Point(188, 213);
             this.yMaxTXT.Name = "yMaxTXT";
             this.yMaxTXT.Size = new System.Drawing.Size(34, 20);
-            this.yMaxTXT.TabIndex = 27;
+            this.yMaxTXT.TabIndex = 9;
             // 
             // label20
             // 
@@ -337,70 +338,70 @@
             this.graphTypeCMB.Location = new System.Drawing.Point(123, 265);
             this.graphTypeCMB.Name = "graphTypeCMB";
             this.graphTypeCMB.Size = new System.Drawing.Size(99, 21);
-            this.graphTypeCMB.TabIndex = 29;
+            this.graphTypeCMB.TabIndex = 10;
             // 
             // graphWidthTXT
             // 
             this.graphWidthTXT.Location = new System.Drawing.Point(127, 292);
             this.graphWidthTXT.Name = "graphWidthTXT";
             this.graphWidthTXT.Size = new System.Drawing.Size(33, 20);
-            this.graphWidthTXT.TabIndex = 30;
+            this.graphWidthTXT.TabIndex = 11;
             // 
             // graphHeightTXT
             // 
             this.graphHeightTXT.Location = new System.Drawing.Point(188, 292);
             this.graphHeightTXT.Name = "graphHeightTXT";
             this.graphHeightTXT.Size = new System.Drawing.Size(33, 20);
-            this.graphHeightTXT.TabIndex = 31;
+            this.graphHeightTXT.TabIndex = 12;
             // 
             // graphSubtitleTXT
             // 
             this.graphSubtitleTXT.Location = new System.Drawing.Point(123, 344);
             this.graphSubtitleTXT.Name = "graphSubtitleTXT";
             this.graphSubtitleTXT.Size = new System.Drawing.Size(99, 20);
-            this.graphSubtitleTXT.TabIndex = 32;
+            this.graphSubtitleTXT.TabIndex = 14;
             // 
             // plotColorTXT
             // 
             this.plotColorTXT.Location = new System.Drawing.Point(123, 370);
             this.plotColorTXT.Name = "plotColorTXT";
             this.plotColorTXT.Size = new System.Drawing.Size(99, 20);
-            this.plotColorTXT.TabIndex = 33;
+            this.plotColorTXT.TabIndex = 15;
             // 
             // xAxisLabelTXT
             // 
             this.xAxisLabelTXT.Location = new System.Drawing.Point(123, 396);
             this.xAxisLabelTXT.Name = "xAxisLabelTXT";
             this.xAxisLabelTXT.Size = new System.Drawing.Size(99, 20);
-            this.xAxisLabelTXT.TabIndex = 34;
+            this.xAxisLabelTXT.TabIndex = 16;
             // 
             // yAxisLabelTXT
             // 
             this.yAxisLabelTXT.Location = new System.Drawing.Point(123, 422);
             this.yAxisLabelTXT.Name = "yAxisLabelTXT";
             this.yAxisLabelTXT.Size = new System.Drawing.Size(99, 20);
-            this.yAxisLabelTXT.TabIndex = 35;
+            this.yAxisLabelTXT.TabIndex = 17;
             // 
             // labelColorTXT
             // 
             this.labelColorTXT.Location = new System.Drawing.Point(123, 448);
             this.labelColorTXT.Name = "labelColorTXT";
             this.labelColorTXT.Size = new System.Drawing.Size(99, 20);
-            this.labelColorTXT.TabIndex = 36;
+            this.labelColorTXT.TabIndex = 18;
             // 
             // labelSizeTXT
             // 
             this.labelSizeTXT.Location = new System.Drawing.Point(123, 474);
             this.labelSizeTXT.Name = "labelSizeTXT";
             this.labelSizeTXT.Size = new System.Drawing.Size(42, 20);
-            this.labelSizeTXT.TabIndex = 37;
+            this.labelSizeTXT.TabIndex = 19;
             // 
             // loadDataFileBTN
             // 
             this.loadDataFileBTN.Location = new System.Drawing.Point(634, 23);
             this.loadDataFileBTN.Name = "loadDataFileBTN";
             this.loadDataFileBTN.Size = new System.Drawing.Size(35, 20);
-            this.loadDataFileBTN.TabIndex = 38;
+            this.loadDataFileBTN.TabIndex = 2;
             this.loadDataFileBTN.Text = "...";
             this.loadDataFileBTN.UseVisualStyleBackColor = true;
             this.loadDataFileBTN.Click += new System.EventHandler(this.loadDataFileBTN_Click);
@@ -410,7 +411,7 @@
             this.outputDirectoryBTN.Location = new System.Drawing.Point(634, 49);
             this.outputDirectoryBTN.Name = "outputDirectoryBTN";
             this.outputDirectoryBTN.Size = new System.Drawing.Size(35, 20);
-            this.outputDirectoryBTN.TabIndex = 39;
+            this.outputDirectoryBTN.TabIndex = 3;
             this.outputDirectoryBTN.Text = "...";
             this.outputDirectoryBTN.UseVisualStyleBackColor = true;
             this.outputDirectoryBTN.Click += new System.EventHandler(this.outputDirectoryBTN_Click);
@@ -418,9 +419,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::RockSatGraphIt.Properties.Resources.MissionPatch;
-            this.pictureBox1.Location = new System.Drawing.Point(260, 99);
+            this.pictureBox1.Location = new System.Drawing.Point(262, 99);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(409, 395);
+            this.pictureBox1.Size = new System.Drawing.Size(407, 395);
             this.pictureBox1.TabIndex = 40;
             this.pictureBox1.TabStop = false;
             // 
@@ -429,16 +430,28 @@
             this.createGraphBTN.Location = new System.Drawing.Point(171, 471);
             this.createGraphBTN.Name = "createGraphBTN";
             this.createGraphBTN.Size = new System.Drawing.Size(83, 25);
-            this.createGraphBTN.TabIndex = 41;
+            this.createGraphBTN.TabIndex = 20;
             this.createGraphBTN.Text = "Graphit!";
             this.createGraphBTN.UseVisualStyleBackColor = true;
             this.createGraphBTN.Click += new System.EventHandler(this.createGraphBTN_Click);
+            // 
+            // consoleRTB
+            // 
+            this.consoleRTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.consoleRTB.Location = new System.Drawing.Point(15, 527);
+            this.consoleRTB.Name = "consoleRTB";
+            this.consoleRTB.Size = new System.Drawing.Size(654, 100);
+            this.consoleRTB.TabIndex = 42;
+            this.consoleRTB.Text = "";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 514);
+            this.ClientSize = new System.Drawing.Size(685, 641);
+            this.Controls.Add(this.consoleRTB);
             this.Controls.Add(this.createGraphBTN);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.outputDirectoryBTN);
@@ -482,6 +495,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(701, 1000);
+            this.MinimumSize = new System.Drawing.Size(701, 680);
             this.Name = "MainForm";
             this.Text = "Graphit! A RockSat-C CC-CO Graphing Tool v1.1";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -535,6 +550,7 @@
         private System.Windows.Forms.Button outputDirectoryBTN;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button createGraphBTN;
+        private System.Windows.Forms.RichTextBox consoleRTB;
     }
 }
 
