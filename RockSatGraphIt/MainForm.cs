@@ -1,13 +1,22 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using Ionic.Zip;
 using RockSatGraphIt.Properties;
 
 namespace RockSatGraphIt {
     public partial class MainForm : Form {
+        private string _dataDir;
+        private string _zipPath;
+        private string _dataDumpFolderName = @"/RockSat-C 2016 CCCO Launch Data";
+
         public MainForm() {
             InitializeComponent();
         }
@@ -21,7 +30,7 @@ namespace RockSatGraphIt {
                 MessageBox.Show(@"Setup complete.", Resources.AlertTitle, MessageBoxButtons.OK);
             }
             LoadSettings();
-
+            FormClosing += MainForm_FormClosing;
             consoleRTB.ReadOnly = true;
         }
 
@@ -102,11 +111,7 @@ namespace RockSatGraphIt {
             Settings.Default.Save();
         }
 
-        private void CreateDependencies() {
-            File.WriteAllBytes(@"R.zip", Resources.R);
-            ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
-            File.Delete("R.zip");
-        }
+        
 
         private bool Ready(bool verbose) {
             if (fileNameTXT.Text == string.Empty || timeStartTXT.Text == string.Empty ||
@@ -231,11 +236,13 @@ namespace RockSatGraphIt {
 
         private void ExecuteScript(string scriptPath, string executablePath, string args) {
             //Create our process start info
+            var editedPath = "\"" + scriptPath + "\" " + args;
+
             var processStartInfo = new ProcessStartInfo {
                 FileName = executablePath,
                 // ReSharper disable once AssignNullToNotNullAttribute
                 WorkingDirectory = Path.GetDirectoryName(executablePath),
-                Arguments = scriptPath + " " + args,
+                Arguments = editedPath,
                 RedirectStandardInput = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -249,8 +256,11 @@ namespace RockSatGraphIt {
                 EnableRaisingEvents = true,
                 StartInfo = processStartInfo
             };
+
             proc.Exited += ExecutionFinished;
             proc.OutputDataReceived += LogOutputData;
+
+            
 
             //Disable Create graph button so we can't do this more than once at a time
             createGraphBTN.Enabled = false;
@@ -260,11 +270,19 @@ namespace RockSatGraphIt {
                 proc.Start();
             }
             catch (Exception ex) {
-                WriteOutput("Failed: " + ex + Environment.NewLine, Color.Red);
+                WriteOutput("Failed: " + ex + Environment.NewLine, Color.LawnGreen);
             }
-
             proc.BeginOutputReadLine();
+            //string error = proc.StandardError.ReadLine();
+            //proc.WaitForExit();
+            //LogErrorData(error);
 
+
+        }
+
+        private void LogErrorData(string errorMessage) {
+
+            WriteOutput(errorMessage, Color.DarkRed);
         }
 
         private void LogOutputData(object sender, DataReceivedEventArgs e) {
@@ -301,6 +319,128 @@ namespace RockSatGraphIt {
                 fs?.Dispose();
             }
             return true;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+            Application.Exit();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            if (MessageBox.Show("Are you sure you wish to exit?", "...sniff sniff...", MessageBoxButtons.OKCancel) ==
+                DialogResult.Cancel) e.Cancel = true;
+        }
+
+        private void downloadDatafilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            var fbd = new FolderBrowserDialog {
+                Description = "Please select the folder to download the data files to.",
+                RootFolder = Environment.SpecialFolder.MyDocuments,
+                ShowNewFolderButton = true,
+                SelectedPath = Environment.SpecialFolder.MyDocuments.ToString() + @"\RockSat-C 2016 Datafiles\"
+            };
+            if (fbd.ShowDialog() == DialogResult.OK) {
+                _zipPath = fbd.SelectedPath;
+                startDownload(_zipPath);
+            }
+        }
+
+        private void CreateDependencies()
+        {
+            File.WriteAllBytes(@"R.zip", Resources.R);
+
+            //ZipFile.ExtractToDirectory(@"R.zip", Directory.GetCurrentDirectory());
+            ExtractFileAsync(@"R.zip",Directory.GetCurrentDirectory(),progressBarLBL,progressBar1,createGraphBTN);
+
+            //File.Delete("R.zip");
+        }
+
+        private void startDownload(string path) {
+            BeginInvoke((Action) (() => {
+                createGraphBTN.Enabled = false;
+            }));
+            var thread = new Thread(() => {
+                var client = new WebClient();
+                client.DownloadProgressChanged += client_DownloadProgressChanged;
+                client.DownloadFileCompleted += client_DownloadFileCompleted;
+                var dumpDir = path + _dataDumpFolderName;
+                if (!Directory.Exists(dumpDir)) Directory.CreateDirectory(dumpDir);
+                _dataDir = dumpDir;
+                client.DownloadFileAsync(new Uri("http://apps.jdc.tech/graphit/data/data.zip"), dumpDir + @"/data.zip");
+                
+            });
+            thread.Start();
+        }
+        
+        public void ExtractFileAsync(string zipToUnpack, string unpackDirectory, Label progressBarLabel, ProgressBar progressBar, Button buttonToDisable = null)
+        {
+            BeginInvoke((Action)(() => {
+                progressBar1.Visible = true;
+                if (buttonToDisable != null) buttonToDisable.Enabled = false;
+            }));
+
+            var worker = new BackgroundWorker {WorkerReportsProgress = true};
+
+            worker.ProgressChanged += (o, e) => {
+                progressBarLabel.Enabled = true;
+                progressBar.Value = e.ProgressPercentage;
+
+                progressBarLabel.BackColor = Color.Transparent;
+                progressBarLBL.Text = "Unzipping...";
+            };
+
+            worker.RunWorkerCompleted += delegate {
+                File.Delete(zipToUnpack);
+                progressBarLabel.BackColor = Color.Transparent;
+                progressBarLabel.Text = "Complete!";
+                if (buttonToDisable != null) buttonToDisable.Enabled = true;
+            };
+
+            worker.DoWork += delegate {
+                using (ZipFile zip = ZipFile.Read(zipToUnpack)) {
+                    int step = (int) 100.0/zip.Count;
+                    int percentComplete = 0;
+                    foreach (ZipEntry file in zip) {
+                        file.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
+                        percentComplete += step;
+                        worker.ReportProgress(percentComplete);
+                    }
+                }
+            };
+            worker.RunWorkerAsync();
+            
+        }
+       
+        void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+            
+            BeginInvoke((MethodInvoker)delegate {
+                progressBar1.Visible = true;
+                var bytesIn = double.Parse(e.BytesReceived.ToString());
+                var totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+                var percentage = bytesIn / totalBytes * 100;
+
+                progressBarLBL.BackColor = Color.Transparent;
+                progressBarLBL.Text = "Downloading to " + _zipPath.Replace("/",@"\") + _dataDumpFolderName.Replace("/",@"\");
+                progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
+            });
+        }
+
+        
+        void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            this.BeginInvoke((MethodInvoker)delegate {
+                createGraphBTN.Enabled = true;
+                progressBarLBL.BackColor = Color.Transparent;
+                progressBarLBL.Text = "Complete!";
+                //ZipFile.ExtractToDirectory(_dataDir + @"\data.zip",_dataDir);
+                ExtractFileAsync(_dataDir + @"\data.zip",_dataDir,progressBarLBL,progressBar1,createGraphBTN);
+            });
+            
+        }
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var aboutBox = new AboutBOX();
+            aboutBox.Show();
         }
     }
 

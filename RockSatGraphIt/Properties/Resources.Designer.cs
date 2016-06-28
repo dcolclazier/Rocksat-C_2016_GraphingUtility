@@ -145,6 +145,16 @@ namespace RockSatGraphIt.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon MissionPatch_noback {
+            get {
+                object obj = ResourceManager.GetObject("MissionPatch_noback", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon nasa {
             get {
                 object obj = ResourceManager.GetObject("nasa", resourceCulture);
@@ -183,9 +193,10 @@ namespace RockSatGraphIt.Properties {
         ///#clear variables from previous session (dev-use only I think)
         ///rm(list = setdiff(ls(), lsf.str()))
         ///
-        ///cat(&quot;Beginning RockSat Graph Creation Execution\n&quot;);
+        ///cat(&quot;Beginning Graph Creation... Please wait.\n&quot;);
         ///
         ///#TWEAKABLE VARIABLES - INPUT
+        ///
         ///fileName = &quot;__Filename__&quot;   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RScript {

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RockSatGraphIt")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("GraphIt!")]
+[assembly: AssemblyDescription("This tool was designed to analyze the incredibly large sets of data obtained from the improved Terrier rocket launch payload designed by the Community Colleges of Colorado.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RockSatGraphIt")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("JDC Network Solutions")]
+[assembly: AssemblyProduct("RockSat Graphing Utility")]
+[assembly: AssemblyCopyright("MIT License - Open Source")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
