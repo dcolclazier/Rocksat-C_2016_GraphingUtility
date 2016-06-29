@@ -25,11 +25,11 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://apps.jdc.tech/graphit/</InstallUrl>
     <ProductName>Graphit!</ProductName>
-    <PublisherName>JDC Network Solutions, LLC</PublisherName>
+    <PublisherName>David Colclazier, 2016</PublisherName>
     <SuiteName>RockSat-C CC_CO Analysis Tools</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -8,8 +8,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GraphIt!")]
 [assembly: AssemblyDescription("This tool was designed to analyze the incredibly large sets of data obtained from the improved Terrier rocket launch payload designed by the Community Colleges of Colorado.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("JDC Network Solutions")]
-[assembly: AssemblyProduct("RockSat Graphing Utility")]
+[assembly: AssemblyCompany("David Colclazier, 2016")]
+[assembly: AssemblyProduct("RockSat-C Launch Data Graphing Utility")]
 [assembly: AssemblyCopyright("MIT License - Open Source")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.2.*")]
+[assembly: AssemblyFileVersion("1.2.0.2")]
