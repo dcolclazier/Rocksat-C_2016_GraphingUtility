@@ -17,6 +17,8 @@ namespace RockSatGraphIt {
 
         public MainForm() {
             InitializeComponent();
+            this.Text = $"GraphIt!   A RockSat-C Rocket Data Graphing Utility v{Program.Version.Major}.{Program.Version.Minor}.{Program.Version.Revision}"
+            ;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -36,8 +38,8 @@ namespace RockSatGraphIt {
                 DialogResult.Cancel) e.Cancel = true;
         }
 
-        private void StartInitialSetup()
-        {
+        private void StartInitialSetup() {
+            createGraphBTN.Enabled = false;
             WriteOutput("Performing initial setup... Extracting necessary files from embedded resources..",
                 Color.Blue);
             new Task(
@@ -51,7 +53,7 @@ namespace RockSatGraphIt {
         public async void OnIntialSetupComplete()
         {
             Invoke((MethodInvoker)(() => {
-                createGraphBTN.Enabled = true;
+                createGraphBTN.Enabled = false;
 
                 WriteOutput("Extraction complete", Color.Blue);
                 WriteOutput("Unzipping necessary files for graph creation...", Color.Blue);
@@ -60,7 +62,11 @@ namespace RockSatGraphIt {
             var task = new Task(async () => {
                 await FileUtilities.ExtractFileAsync(this, @"R.zip", Directory.GetCurrentDirectory(), false, UpdateProgressBar,
                     () => {
-                        WriteOutput("Initial Setup complete. Ready for some graphing!!", Color.Blue); 
+                        WriteOutput("Initial Setup complete. Ready for some graphing!!", Color.Blue);
+                        Invoke((Action) (() => {
+                            createGraphBTN.Enabled = true;
+                        }));
+                        
                     });
             });
             task.Start();

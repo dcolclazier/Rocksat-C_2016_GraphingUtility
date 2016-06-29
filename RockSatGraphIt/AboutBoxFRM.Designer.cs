@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Deployment.Application;
 using System.Windows.Forms;
 
 namespace RockSatGraphIt
@@ -101,6 +102,7 @@ namespace RockSatGraphIt
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(271, 17);
             this.labelVersion.TabIndex = 0;
+            this.labelVersion.Text = "Version: ";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelCopyright
