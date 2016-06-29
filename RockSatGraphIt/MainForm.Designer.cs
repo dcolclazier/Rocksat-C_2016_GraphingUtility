@@ -1,11 +1,18 @@
-﻿namespace RockSatGraphIt
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using RockSatGraphIt.Properties;
+
+namespace RockSatGraphIt
 {
     partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -74,14 +81,13 @@
             this.consoleRTB = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadSettingsFilegsfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSettingsFilegsfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadDatafilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.downloadDatafilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.progressBarLBL = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -343,7 +349,7 @@
             this.graphTypeCMB.Items.AddRange(new object[] {
             "Points",
             "Line",
-            "Points + Line",
+            "Both Points + Line",
             "Overplotted",
             "Histogram",
             "Stair Steps"});
@@ -452,9 +458,9 @@
             this.consoleRTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.consoleRTB.Location = new System.Drawing.Point(15, 536);
+            this.consoleRTB.Location = new System.Drawing.Point(15, 509);
             this.consoleRTB.Name = "consoleRTB";
-            this.consoleRTB.Size = new System.Drawing.Size(654, 115);
+            this.consoleRTB.Size = new System.Drawing.Size(654, 127);
             this.consoleRTB.TabIndex = 42;
             this.consoleRTB.Text = "";
             // 
@@ -481,24 +487,31 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // loadSettingsFilegsfToolStripMenuItem
-            // 
-            this.loadSettingsFilegsfToolStripMenuItem.Name = "loadSettingsFilegsfToolStripMenuItem";
-            this.loadSettingsFilegsfToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.loadSettingsFilegsfToolStripMenuItem.Text = "Load settings file (.gsf)";
-            // 
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
             this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.saveSettingsToolStripMenuItem.Text = "Save settings...";
             // 
+            // loadSettingsFilegsfToolStripMenuItem
+            // 
+            this.loadSettingsFilegsfToolStripMenuItem.Name = "loadSettingsFilegsfToolStripMenuItem";
+            this.loadSettingsFilegsfToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.loadSettingsFilegsfToolStripMenuItem.Text = "Load settings file (.gsf)";
+            // 
+            // downloadDatafilesToolStripMenuItem
+            // 
+            this.downloadDatafilesToolStripMenuItem.Name = "downloadDatafilesToolStripMenuItem";
+            this.downloadDatafilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.downloadDatafilesToolStripMenuItem.Text = "Download datafiles...";
+            this.downloadDatafilesToolStripMenuItem.Click += new System.EventHandler(this.downloadDatafilesMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -512,45 +525,28 @@
             // howToToolStripMenuItem
             // 
             this.howToToolStripMenuItem.Name = "howToToolStripMenuItem";
-            this.howToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.howToToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.howToToolStripMenuItem.Text = "How to...";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // downloadDatafilesToolStripMenuItem
-            // 
-            this.downloadDatafilesToolStripMenuItem.Name = "downloadDatafilesToolStripMenuItem";
-            this.downloadDatafilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.downloadDatafilesToolStripMenuItem.Text = "Download datafiles...";
-            this.downloadDatafilesToolStripMenuItem.Click += new System.EventHandler(this.downloadDatafilesToolStripMenuItem_Click);
-            // 
-            // progressBarLBL
-            // 
-            this.progressBarLBL.AutoSize = true;
-            this.progressBarLBL.Location = new System.Drawing.Point(254, 487);
-            this.progressBarLBL.Name = "progressBarLBL";
-            this.progressBarLBL.Size = new System.Drawing.Size(0, 13);
-            this.progressBarLBL.TabIndex = 45;
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(247, 507);
+            this.progressBar1.Location = new System.Drawing.Point(15, 642);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(407, 23);
+            this.progressBar1.Size = new System.Drawing.Size(654, 11);
             this.progressBar1.TabIndex = 44;
-            this.progressBar1.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 665);
-            this.Controls.Add(this.progressBarLBL);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.consoleRTB);
             this.Controls.Add(this.createGraphBTN);
@@ -602,6 +598,7 @@
             this.Name = "MainForm";
             this.Text = "Graphit! A RockSat-C CC-CO Graphing Tool v1.1";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -612,60 +609,59 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox fileNameTXT;
-        private System.Windows.Forms.TextBox outputDirectoryTXT;
-        private System.Windows.Forms.TextBox timeStartTXT;
-        private System.Windows.Forms.ComboBox fileTypeCMB;
-        private System.Windows.Forms.TextBox timeStopTXT;
-        private System.Windows.Forms.TextBox xAxisTicksTXT;
-        private System.Windows.Forms.TextBox graphTitleTXT;
-        private System.Windows.Forms.TextBox yMinTXT;
-        private System.Windows.Forms.TextBox yMaxTXT;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.ComboBox graphTypeCMB;
-        private System.Windows.Forms.TextBox graphWidthTXT;
-        private System.Windows.Forms.TextBox graphHeightTXT;
-        private System.Windows.Forms.TextBox graphSubtitleTXT;
-        private System.Windows.Forms.TextBox plotColorTXT;
-        private System.Windows.Forms.TextBox xAxisLabelTXT;
-        private System.Windows.Forms.TextBox yAxisLabelTXT;
-        private System.Windows.Forms.TextBox labelColorTXT;
-        private System.Windows.Forms.TextBox labelSizeTXT;
-        private System.Windows.Forms.Button loadDataFileBTN;
-        private System.Windows.Forms.Button outputDirectoryBTN;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button createGraphBTN;
-        private System.Windows.Forms.RichTextBox consoleRTB;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadSettingsFilegsfToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem howToToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem downloadDatafilesToolStripMenuItem;
-        private System.Windows.Forms.Label progressBarLBL;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private Label label9;
+        private Label label10;
+        private Label label11;
+        private Label label12;
+        private Label label13;
+        private Label label14;
+        private Label label15;
+        private Label label16;
+        private Label label17;
+        private Label label18;
+        private Label label19;
+        private TextBox fileNameTXT;
+        private TextBox outputDirectoryTXT;
+        private TextBox timeStartTXT;
+        private ComboBox fileTypeCMB;
+        private TextBox timeStopTXT;
+        private TextBox xAxisTicksTXT;
+        private TextBox graphTitleTXT;
+        private TextBox yMinTXT;
+        private TextBox yMaxTXT;
+        private Label label20;
+        private ComboBox graphTypeCMB;
+        private TextBox graphWidthTXT;
+        private TextBox graphHeightTXT;
+        private TextBox graphSubtitleTXT;
+        private TextBox plotColorTXT;
+        private TextBox xAxisLabelTXT;
+        private TextBox yAxisLabelTXT;
+        private TextBox labelColorTXT;
+        private TextBox labelSizeTXT;
+        private Button loadDataFileBTN;
+        private Button outputDirectoryBTN;
+        private PictureBox pictureBox1;
+        private Button createGraphBTN;
+        private RichTextBox consoleRTB;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem loadSettingsFilegsfToolStripMenuItem;
+        private ToolStripMenuItem saveSettingsToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem howToToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem downloadDatafilesToolStripMenuItem;
+        private ProgressBar progressBar1;
     }
 }
 

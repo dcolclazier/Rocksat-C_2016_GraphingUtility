@@ -163,4 +163,13 @@
   <data name="MissionPatch_noback" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MissionPatch_noback.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ExitMessage" xml:space="preserve">
+    <value>Are you sure you wish to exit?</value>
+  </data>
+  <data name="ExitTitle" xml:space="preserve">
+    <value>...sniff sniff...</value>
+  </data>
+  <data name="DataDirectorySelectMessage" xml:space="preserve">
+    <value>Select Destination. Files will reside in a folder called "Rocksat-C Launch Data"</value>
+  </data>
 </root>

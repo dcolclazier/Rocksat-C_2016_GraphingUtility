@@ -70,6 +70,15 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Destination. Files will reside in a folder called &quot;Rocksat-C Launch Data&quot;.
+        /// </summary>
+        internal static string DataDirectorySelectMessage {
+            get {
+                return ResourceManager.GetString("DataDirectorySelectMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Directory does not exist... Create?.
         /// </summary>
         internal static string DirectoryDoesntExist {
@@ -84,6 +93,24 @@ namespace RockSatGraphIt.Properties {
         internal static string EmptyFieldsError {
             get {
                 return ResourceManager.GetString("EmptyFieldsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to exit?.
+        /// </summary>
+        internal static string ExitMessage {
+            get {
+                return ResourceManager.GetString("ExitMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ...sniff sniff....
+        /// </summary>
+        internal static string ExitTitle {
+            get {
+                return ResourceManager.GetString("ExitTitle", resourceCulture);
             }
         }
         
