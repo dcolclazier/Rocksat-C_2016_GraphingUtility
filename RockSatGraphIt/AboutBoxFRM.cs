@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace RockSatGraphIt
 {
-    partial class AboutBOX : Form
+    partial class AboutBoxFRM : Form
     {
-        public AboutBOX()
+        public AboutBoxFRM()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
