@@ -1,13 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
-using RockSatGraphIt.Properties;
 
-namespace RockSatGraphIt
+namespace RockSatGraphIt.Forms
 {
-    partial class MainForm
+    partial class GraphitForm
     {
         /// <summary>
         /// Required designer variable.
@@ -35,7 +31,7 @@ namespace RockSatGraphIt
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GraphitForm));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -84,6 +80,8 @@ namespace RockSatGraphIt
             this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSettingsFilegsfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadDatafilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.launchImageAnalysisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.launchNewGraphItWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -458,9 +456,9 @@ namespace RockSatGraphIt
             this.consoleRTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.consoleRTB.Location = new System.Drawing.Point(15, 509);
+            this.consoleRTB.Location = new System.Drawing.Point(12, 509);
             this.consoleRTB.Name = "consoleRTB";
-            this.consoleRTB.Size = new System.Drawing.Size(654, 127);
+            this.consoleRTB.Size = new System.Drawing.Size(661, 127);
             this.consoleRTB.TabIndex = 42;
             this.consoleRTB.Text = "";
             // 
@@ -482,6 +480,8 @@ namespace RockSatGraphIt
             this.saveSettingsToolStripMenuItem,
             this.loadSettingsFilegsfToolStripMenuItem,
             this.downloadDatafilesToolStripMenuItem,
+            this.launchImageAnalysisToolToolStripMenuItem,
+            this.launchNewGraphItWindowToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -490,26 +490,40 @@ namespace RockSatGraphIt
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.saveSettingsToolStripMenuItem.Text = "Save settings...";
             // 
             // loadSettingsFilegsfToolStripMenuItem
             // 
             this.loadSettingsFilegsfToolStripMenuItem.Name = "loadSettingsFilegsfToolStripMenuItem";
-            this.loadSettingsFilegsfToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.loadSettingsFilegsfToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.loadSettingsFilegsfToolStripMenuItem.Text = "Load settings file (.gsf)";
             // 
             // downloadDatafilesToolStripMenuItem
             // 
             this.downloadDatafilesToolStripMenuItem.Name = "downloadDatafilesToolStripMenuItem";
-            this.downloadDatafilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.downloadDatafilesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.downloadDatafilesToolStripMenuItem.Text = "Download datafiles...";
             this.downloadDatafilesToolStripMenuItem.Click += new System.EventHandler(this.downloadDatafilesMenuItem_Click);
+            // 
+            // launchImageAnalysisToolToolStripMenuItem
+            // 
+            this.launchImageAnalysisToolToolStripMenuItem.Name = "launchImageAnalysisToolToolStripMenuItem";
+            this.launchImageAnalysisToolToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.launchImageAnalysisToolToolStripMenuItem.Text = "Launch New AnalyzeIt! Window";
+            this.launchImageAnalysisToolToolStripMenuItem.Click += new System.EventHandler(this.newAnalyzeitWindowMenuItem_Click);
+            // 
+            // launchNewGraphItWindowToolStripMenuItem
+            // 
+            this.launchNewGraphItWindowToolStripMenuItem.Name = "launchNewGraphItWindowToolStripMenuItem";
+            this.launchNewGraphItWindowToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.launchNewGraphItWindowToolStripMenuItem.Text = "Launch New GraphIt! Window";
+            this.launchNewGraphItWindowToolStripMenuItem.Click += new System.EventHandler(this.launchNewGraphItWindowToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
@@ -537,12 +551,14 @@ namespace RockSatGraphIt
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(15, 642);
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(12, 642);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(654, 11);
+            this.progressBar1.Size = new System.Drawing.Size(661, 11);
             this.progressBar1.TabIndex = 44;
             // 
-            // MainForm
+            // GraphitForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -595,10 +611,10 @@ namespace RockSatGraphIt
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(701, 1000);
             this.MinimumSize = new System.Drawing.Size(701, 680);
-            this.Name = "MainForm";
+            this.Name = "GraphitForm";
             this.Text = "Graphit! A RockSat-C CC-CO Graphing Tool v1.1";
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.Load += new System.EventHandler(this.GraphitForm_Load);
+            this.Shown += new System.EventHandler(this.GraphitForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -662,6 +678,8 @@ namespace RockSatGraphIt
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem downloadDatafilesToolStripMenuItem;
         private ProgressBar progressBar1;
+        private ToolStripMenuItem launchImageAnalysisToolToolStripMenuItem;
+        private ToolStripMenuItem launchNewGraphItWindowToolStripMenuItem;
     }
 }
 

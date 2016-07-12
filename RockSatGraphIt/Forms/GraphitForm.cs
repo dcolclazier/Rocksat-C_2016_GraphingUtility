@@ -4,72 +4,99 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RockSatGraphIt.Properties;
+using RockSatGraphIt.Utilities;
 
-#pragma warning disable 1998
+//#pragma warning disable 1998
 
-namespace RockSatGraphIt {
-
-    
-    public partial class MainForm : Form {
-
-
-        #region Form Event Handlers
-
-        public MainForm() {
-            InitializeComponent();
-            this.Text = $"GraphIt!   A RockSat-C Rocket Data Graphing Utility v{Program.Version.Major}.{Program.Version.Minor}.{Program.Version.Revision}"
-            ;
+namespace RockSatGraphIt.Forms {
+    public partial class GraphitForm : Form {
+        private void newAnalyzeitWindowMenuItem_Click(object sender, EventArgs e) {
+            var frm = new AnalyzeitForm {
+                StartPosition = FormStartPosition.Manual,
+                Width = Width,
+                Height = Height,
+                Location = new Point(Location.X + Width - 13, Location.Y)
+            };
+            frm.Show();
+        }
+        private void launchNewGraphItWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new GraphitForm()
+            {
+                StartPosition = FormStartPosition.Manual,
+                Width = Width,
+                Height = Height,
+                Location = new Point(Location.X + Width - 13, Location.Y)
+            };
+            frm.Show();
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
+        #region Event Handlers
+
+        public GraphitForm() {
+            InitializeComponent();
+            Text = $"GraphIt!   A RockSat-C Rocket Data Graphing Utility v{Program.Version.Major}.{Program.Version.Minor}.{Program.Version.Revision}";
+        }
+
+        public sealed override string Text {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
+        private void GraphitForm_Load(object sender, EventArgs e) {
             LoadSettings();
             FormClosing += MainForm_FormClosing;
         }
 
-        private void MainForm_Shown(object sender, EventArgs e) {
-            if (Directory.Exists(@"R\")) return;
-
-            StartInitialSetup();
+        private async void GraphitForm_Shown(object sender, EventArgs e) {
+            if (!VerifyFolderStructure()) await InitialSetupAsync();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        //bug probably a better way of doing this...
+        private bool VerifyFolderStructure() {
+            var py34test = 6603;
+            var rTest = 3699;
+
+            var pyDir = @"Python34\";
+            var rDir = Directory.GetCurrentDirectory() + @"\R\";
+
+            if (!Directory.Exists(rDir) || !Directory.Exists(pyDir)) return false;
+            if (Directory.GetFiles(rDir, "*", SearchOption.AllDirectories).Length != rTest) return false;
+            if (Directory.GetFiles(pyDir, "*", SearchOption.AllDirectories).Length != py34test) return false;
+
+            WriteOutput("Ready to do some graphing!", Color.Blue);
+            return true;
+            //if()
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             if (MessageBox.Show(Resources.ExitMessage, Resources.ExitTitle, MessageBoxButtons.OKCancel) ==
                 DialogResult.Cancel) e.Cancel = true;
         }
 
-        private void StartInitialSetup() {
+        //bug you could lighten this up by checking the necessity of each step...
+        private async Task InitialSetupAsync() {
+            //NEW WAY
             createGraphBTN.Enabled = false;
-            WriteOutput("Performing initial setup... Extracting necessary files from embedded resources..",
-                Color.Blue);
-            new Task(
-                async () => {
-                    await
-                        FileUtilities.WriteFileAsync(this, Resources.R, @"R.zip", UpdateProgressBar,
-                            OnIntialSetupComplete);
-                }).Start();
-        }
+            WriteOutput("Performing initial setup...", Color.Blue);
+            WriteOutput("Extracting necessary R files from embedded resources...", Color.Blue);
 
-        public async void OnIntialSetupComplete()
-        {
-            Invoke((MethodInvoker)(() => {
-                createGraphBTN.Enabled = false;
+            await Task.Run(() => FileUtilities.WriteBytesToFile(Resources.R, @"R.zip", UpdateProgressBar));
 
-                WriteOutput("Extraction complete", Color.Blue);
-                WriteOutput("Unzipping necessary files for graph creation...", Color.Blue);
-            }));
+            WriteOutput("Extracting necessary Py files from embedded resources...", Color.Blue);
 
-            var task = new Task(async () => {
-                await FileUtilities.ExtractFileAsync(this, @"R.zip", Directory.GetCurrentDirectory(), false, UpdateProgressBar,
-                    () => {
-                        WriteOutput("Initial Setup complete. Ready for some graphing!!", Color.Blue);
-                        Invoke((Action) (() => {
-                            createGraphBTN.Enabled = true;
-                        }));
-                        
-                    });
-            });
-            task.Start();
+            await Task.Run(() => FileUtilities.WriteBytesToFile(Resources.Python34, @"Python34.zip", UpdateProgressBar));
+
+            WriteOutput("Extraction complete... unzipping R files...", Color.Blue);
+            var outputPathR = Directory.GetCurrentDirectory() + @"\R.zip";
+            var outputPathPy = Directory.GetCurrentDirectory() + @"\Python34.zip";
+
+            await Task.Run(() => FileUtilities.ExtractArchive(outputPathR, UpdateProgressBar));
+            WriteOutput("Extraction complete... unzipping Py files...", Color.Blue);
+            await Task.Run(() => FileUtilities.ExtractArchive(outputPathPy, UpdateProgressBar));
+
+            WriteOutput("Setup complete... Let's do some graphing!", Color.Blue);
+            createGraphBTN.Enabled = true;
         }
 
         private void loadDataFileBTN_Click(object sender, EventArgs e) {
@@ -87,47 +114,44 @@ namespace RockSatGraphIt {
         }
 
         private void createGraphBTN_Click(object sender, EventArgs e) {
-            if (!Ready(true)) return;
+            if (!ReadyToCreateGraph(true)) return;
 
             createGraphBTN.Enabled = false;
-            if (!ScriptDaemon.GenerateScript(Resources.RScript, "RScript.r", FixRScript)) {
-                MessageBox.Show(Resources.ScriptGenerationError, Resources.AlertTitle,
-                    MessageBoxButtons.OK);
-                return;
-            }
 
-            var rCodeFilePath = Directory.GetCurrentDirectory() + @"\Rscript.r";
+            var rScriptPath = Directory.GetCurrentDirectory() + @"\Rscript.r";
 
-            var rScriptExecutablePath = Environment.Is64BitOperatingSystem
+            var rScriptExePath = Environment.Is64BitOperatingSystem
                 ? Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x64\RScript.exe"
                 : Directory.GetCurrentDirectory() + @"\R\R-3.3.1\bin\x86\RScript.exe";
 
-            ScriptDaemon.ExecuteScript(rCodeFilePath, rScriptExecutablePath, "--verbose",
-                onComplete: delegate { Invoke((Action) (() => {
-                    WriteOutput("Graph generation complete.", Color.Blue);
-                    createGraphBTN.Enabled = true;
-                })); },
-                onDataReceived: (data) => { WriteOutput(data, Color.Blue); },
-                onException: (exception) => { WriteOutput(exception.Message + exception.InnerException?.Message, Color.Red);}
-                );
+            var scriptSchema = new ScriptStartInfo(rScriptPath, rScriptExePath) {
+                Args = "--verbose",
+                OnDataReceived = data => { WriteOutput(data, Color.Blue); },
+                OnException = exception => { WriteOutput(exception.Message + exception.InnerException?.Message, Color.Red); },
+                OnExit = delegate {
+                    Invoke((Action) (() => {
+                        WriteOutput("Graph generation complete.", Color.Blue);
+                        createGraphBTN.Enabled = true;
+                    }));
+                }
+            };
+
+            ScriptDaemon.ExecuteScript(this, scriptSchema, false);
         }
 
         private void exitMenuItem_Click(object sender, EventArgs e) {
             Application.Exit();
         }
 
-        private void aboutMenuItem_Click(object sender, EventArgs e)
-        {
-            var aboutBox = new AboutBoxFRM();
+        private void aboutMenuItem_Click(object sender, EventArgs e) {
+            var aboutBox = new AboutForm();
             aboutBox.Show();
         }
 
-        private void downloadDatafilesMenuItem_Click(object sender, EventArgs e)
-        {
-            string url = "http://apps.jdc.tech/graphit/data/data.zip";
+        private async void downloadDatafilesMenuItem_Click(object sender, EventArgs e) {
+            const string url = "http://apps.jdc.tech/graphit/data/data.zip";
 
-            var fbd = new FolderBrowserDialog
-            {
+            var fbd = new FolderBrowserDialog {
                 Description = Resources.DataDirectorySelectMessage,
                 RootFolder = Environment.SpecialFolder.MyDocuments,
                 ShowNewFolderButton = true,
@@ -135,50 +159,30 @@ namespace RockSatGraphIt {
             };
             if (fbd.ShowDialog() != DialogResult.OK) return;
 
+            var downloadPath = fbd.SelectedPath + @"\Rocksat-C Launch Data\data.zip";
+            var directory = Path.GetDirectoryName(downloadPath);
+
             createGraphBTN.Enabled = false;
+
             WriteOutput("Beginning download of data files from " + url, Color.Blue);
-            new Task(async () => {
-                await
-                    FileUtilities.DownloadFileAsynch(this, new Uri(url),
-                        fbd.SelectedPath + @"\Rocksat-C Launch Data\data.zip", UpdateProgressBar, OnDataDownloadComplete);
+            WriteOutput("Files will be downloaded to " + directory, Color.Blue);
 
-            }).Start();
+            await FileUtilities.DownloadFileAsync(new Uri(url), downloadPath, UpdateProgressBar);
+
+            WriteOutput("Download complete..", Color.Blue);
+            WriteOutput("Unzipping files..", Color.Blue);
+
+            await Task.Run(() => FileUtilities.ExtractArchive(downloadPath, UpdateProgressBar));
+
+            WriteOutput("Files unzipped successfuly.", Color.Blue);
+
+            createGraphBTN.Enabled = true;
         }
 
-        private async void OnDataDownloadComplete(string downloadPath)
-        {
-
-            Invoke((MethodInvoker)(() => {
-
-                WriteOutput("Download complete.", Color.Blue);
-                WriteOutput("Unzipping files...", Color.Blue);
-            }));
-
-            var task = new Task(async () => {
-                var directory = Path.GetDirectoryName(downloadPath);
-                await FileUtilities.ExtractFileAsync(this, downloadPath, directory, true, UpdateProgressBar,
-                    () => {
-                        WriteOutput("Data files unzipped succesfully to " + directory, Color.Blue);
-                        BeginInvoke((Action)(() => {
-                            createGraphBTN.Enabled = true;
-                        }));
-                    });
-            });
-            task.Start();
-        }
-
-        public void UpdateProgressBar(int percentage)
-        {
-            BeginInvoke((Action)(() => {
-                progressBar1.Enabled = true;
-
-                progressBar1.SetProgressNoAnimation(percentage);
-            }));
-        }
         #endregion
 
-
         #region Form Behaviour
+
         private void LoadSettings() {
             fileNameTXT.Text = (string) Settings.Default["fileNameTXT"];
             timeStartTXT.Text = (string) Settings.Default["timeStartTXT"];
@@ -233,7 +237,7 @@ namespace RockSatGraphIt {
             }));
         }
 
-        private bool Ready(bool verbose) {
+        private bool ReadyToCreateGraph(bool verbose) {
             if (fileNameTXT.Text == string.Empty || timeStartTXT.Text == string.Empty ||
                 timeStopTXT.Text == string.Empty ||
                 xAxisTicksTXT.Text == string.Empty || yMinTXT.Text == string.Empty || yMaxTXT.Text == string.Empty ||
@@ -308,15 +312,24 @@ namespace RockSatGraphIt {
                 return false;
             }
 
+            if (!ScriptDaemon.FixScript(Resources.RScriptTemplate, "RScript.r", FixRScript)) {
+                MessageBox.Show(Resources.ScriptGenerationError, Resources.AlertTitle, MessageBoxButtons.OK);
+                return false;
+            }
+
             SaveSettings();
+
             return true;
         }
-        
 
+        public void UpdateProgressBar(int percentage) {
+            BeginInvoke((Action) (() => {
+                progressBar1.Enabled = true;
+                progressBar1.SetProgressNoAnimation(percentage);
+            }));
+        }
 
-        private string FixRScript(string template)
-        {
-
+        private string FixRScript(string template) {
             var fixedContents = template;
             fixedContents = fixedContents.Replace("__Filename__", Path.GetFileName(fileNameTXT.Text));
             fixedContents = fixedContents.Replace("__FullFilename__", fileNameTXT.Text.Replace(@"\", "/"));
@@ -341,5 +354,7 @@ namespace RockSatGraphIt {
         }
 
         #endregion
+
+        
     }
 }

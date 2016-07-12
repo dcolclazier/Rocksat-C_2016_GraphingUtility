@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace RockSatGraphIt {
+namespace RockSatGraphIt.Utilities {
     public static class ExtensionMethods {
         /// <summary>
         ///     Sets the progress bar value, without using 'Windows Aero' animation.

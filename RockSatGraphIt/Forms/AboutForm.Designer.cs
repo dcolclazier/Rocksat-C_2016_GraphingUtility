@@ -1,10 +1,8 @@
-﻿using System;
-using System.Deployment.Application;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace RockSatGraphIt
+namespace RockSatGraphIt.Forms
 {
-    partial class AboutBoxFRM : Form 
+    partial class AboutForm : Form 
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +29,7 @@ namespace RockSatGraphIt
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBoxFRM));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.labelProductName = new System.Windows.Forms.Label();
@@ -156,7 +154,7 @@ namespace RockSatGraphIt
             this.okButton.Text = "&OK";
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // AboutBoxFRM
+            // AboutForm
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -166,7 +164,7 @@ namespace RockSatGraphIt
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AboutBoxFRM";
+            this.Name = "AboutForm";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

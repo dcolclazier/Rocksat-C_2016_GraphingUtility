@@ -70,11 +70,112 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error extracting archive... .
+        /// </summary>
+        internal static string ArchiveExtractError {
+            get {
+                return ResourceManager.GetString("ArchiveExtractError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure??.
+        /// </summary>
+        internal static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Destination. Files will reside in a folder called &quot;Rocksat-C Launch Data&quot;.
         /// </summary>
         internal static string DataDirectorySelectMessage {
             get {
                 return ResourceManager.GetString("DataDirectorySelectMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to import numpy as np
+        ///import pylab
+        ///import mahotas as mh
+        ///import os
+        ///import os.path
+        ///import math
+        ///import sys
+        ///
+        ///def newprint(message):
+        ///	print(message)
+        ///	sys.stdout.flush()
+        ///	
+        ///
+        ///
+        ///def main():
+        ///    #imageDir = &quot;d:/sandbox&quot;
+        ///    #outputDir = &quot;d:/sandbox&quot;
+        ///    #outputFilename = &quot;test&quot;
+        ///    #extension = &quot;.JPG&quot;
+        ///    #totalFileCount = 40
+        ///    #outputExtension = &quot;.txt&quot;
+        ///
+        ///    imageDir = &quot;__imageDirectory__&quot;
+        ///    outputDir = &quot;__outputDirectory__&quot;
+        ///    outputFilename = &quot;__outputFilename__&quot;
+        ///    extension = &quot;__imageExtension__&quot;
+        ///    totalFileC [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DemoSatStep1 {
+            get {
+                return ResourceManager.GetString("DemoSatStep1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERROR STEP 1 SCRIPT FIX....
+        /// </summary>
+        internal static string DemoSatStep1FixError {
+            get {
+                return ResourceManager.GetString("DemoSatStep1FixError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to import numpy as np
+        ///import pylab
+        ///import mahotas as mh
+        ///import os
+        ///import math
+        ///import sys
+        ///
+        ///def newprint(message):
+        ///    print(message)
+        ///    sys.stdout.flush()
+        ///
+        ///def main():
+        ///    imageDir = &quot;__imageDirectory__&quot;
+        ///    outputDir = &quot;__outputDirectory__&quot;
+        ///    outputFilename = &quot;__outputFilename__&quot;
+        ///    extension = &quot;__imageExtension__&quot;
+        ///    totalFileCount = __totalFileCount__
+        ///    percentCompleteStep = 100.0 / totalFileCount
+        ///
+        ///    newprint(&quot;Calculating max pixel count for each image&quot;)
+        ///    pylab.gray()
+        ///    filename = open(outputDi [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DemoSatStep2 {
+            get {
+                return ResourceManager.GetString("DemoSatStep2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ERROR STEP 2 SCRIPT FIX....
+        /// </summary>
+        internal static string DemosatStep2FixError {
+            get {
+                return ResourceManager.GetString("DemosatStep2FixError", resourceCulture);
             }
         }
         
@@ -88,6 +189,15 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty fields....
+        /// </summary>
+        internal static string EmptyFieldError {
+            get {
+                return ResourceManager.GetString("EmptyFieldError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All fields must be filled out... Sorry!.
         /// </summary>
         internal static string EmptyFieldsError {
@@ -97,7 +207,16 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you wish to exit?.
+        ///   Looks up a localized string similar to ERROR.
+        /// </summary>
+        internal static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to close this window?.
         /// </summary>
         internal static string ExitMessage {
             get {
@@ -106,7 +225,7 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ...sniff sniff....
+        ///   Looks up a localized string similar to Alert.
         /// </summary>
         internal static string ExitTitle {
             get {
@@ -190,11 +309,30 @@ namespace RockSatGraphIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Null download destination path.... this should be impossible....
+        /// </summary>
+        internal static string NullDownloadDest {
+            get {
+                return ResourceManager.GetString("NullDownloadDest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upper bounds must exceed lower bounds...
         /// </summary>
         internal static string NumericalBoundsError {
             get {
                 return ResourceManager.GetString("NumericalBoundsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Python34 {
+            get {
+                object obj = ResourceManager.GetObject("Python34", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -226,9 +364,9 @@ namespace RockSatGraphIt.Properties {
         ///
         ///fileName = &quot;__Filename__&quot;   [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string RScript {
+        internal static string RScriptTemplate {
             get {
-                return ResourceManager.GetString("RScript", resourceCulture);
+                return ResourceManager.GetString("RScriptTemplate", resourceCulture);
             }
         }
         
@@ -238,6 +376,15 @@ namespace RockSatGraphIt.Properties {
         internal static string ScriptGenerationError {
             get {
                 return ResourceManager.GetString("ScriptGenerationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to close this window? Running tasks will be cancelled..
+        /// </summary>
+        internal static string SureTasksWillCancel {
+            get {
+                return ResourceManager.GetString("SureTasksWillCancel", resourceCulture);
             }
         }
     }

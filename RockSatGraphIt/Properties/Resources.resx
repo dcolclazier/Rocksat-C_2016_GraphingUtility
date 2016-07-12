@@ -127,7 +127,7 @@
   <data name="R" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\R.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="RScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="RScriptTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RScript.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="AlertTitle" xml:space="preserve">
@@ -164,12 +164,45 @@
     <value>..\Resources\MissionPatch_noback.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExitMessage" xml:space="preserve">
-    <value>Are you sure you wish to exit?</value>
+    <value>Are you sure you want to close this window?</value>
   </data>
   <data name="ExitTitle" xml:space="preserve">
-    <value>...sniff sniff...</value>
+    <value>Alert</value>
   </data>
   <data name="DataDirectorySelectMessage" xml:space="preserve">
     <value>Select Destination. Files will reside in a folder called "Rocksat-C Launch Data"</value>
+  </data>
+  <data name="ArchiveExtractError" xml:space="preserve">
+    <value>Error extracting archive... </value>
+  </data>
+  <data name="NullDownloadDest" xml:space="preserve">
+    <value>Null download destination path.... this should be impossible...</value>
+  </data>
+  <data name="DemoSatStep1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DemoSatStep1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DemoSatStep2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DemoSatStep2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Python34" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Python34.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="EmptyFieldError" xml:space="preserve">
+    <value>Empty fields...</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="DemoSatStep1FixError" xml:space="preserve">
+    <value>ERROR STEP 1 SCRIPT FIX...</value>
+  </data>
+  <data name="DemosatStep2FixError" xml:space="preserve">
+    <value>ERROR STEP 2 SCRIPT FIX...</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure??</value>
+  </data>
+  <data name="SureTasksWillCancel" xml:space="preserve">
+    <value>Are you sure you want to close this window? Running tasks will be cancelled.</value>
   </data>
 </root>

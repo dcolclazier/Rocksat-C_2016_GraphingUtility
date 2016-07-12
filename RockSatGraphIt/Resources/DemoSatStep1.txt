@@ -1,0 +1,79 @@
+import numpy as np
+import pylab
+import mahotas as mh
+import os
+import os.path
+import math
+import sys
+
+def newprint(message):
+	print(message)
+	sys.stdout.flush()
+	
+
+
+def main():
+    #imageDir = "d:/sandbox"
+    #outputDir = "d:/sandbox"
+    #outputFilename = "test"
+    #extension = ".JPG"
+    #totalFileCount = 40
+    #outputExtension = ".txt"
+
+    imageDir = "__imageDirectory__"
+    outputDir = "__outputDirectory__"
+    outputFilename = "__outputFilename__"
+    extension = "__imageExtension__"
+    totalFileCount = __totalFileCount__
+
+    newprint("Beginning Demosat Test...")
+    newprint("Calculating max pixel count and otsu threshold for each image")
+    percentCompleteStep = 100.0 / totalFileCount
+       	
+    i = 0
+    maxOtsu = 0
+    percentComplete = 0
+    lastPercentComplete = -1
+    percentCompleteInt = 0
+    
+    filename = open(outputDir + outputFilename, 'w')
+    filename.write("Images,Max Pixel,Threshold Value\n")
+    
+    for root, dirs, files in os.walk(imageDir + "/"):
+        for file in files:
+            if file.endswith(extension):
+                
+                pylab.gray()
+                RICH = mh.imread(root + "/" + file)
+                #i += 1
+                
+                ###BEGIN OF MODIFICATIONS FOR APPLICATION USE
+                
+                percentComplete += percentCompleteStep
+                percentCompleteInt = math.floor(percentComplete)
+                if(lastPercentComplete != percentCompleteInt):
+                        newprint(percentCompleteInt)
+                lastPercentComplete = percentCompleteInt
+
+        
+                T = mh.thresholding.otsu(RICH)
+                if T > 0:
+                        #newprint("otsu > 0 tick " + str(T) + " " + str(maxOtsu))
+                        i += 1
+                        if maxOtsu < T:
+                                maxOtsu = T
+                ###END OF MODIFICATIONS FOR APPLICATION USE
+
+                filename.write(str(file)+","+str(RICH.max())+","+str(T)+"\n")
+    filename.close()
+    newprint("Total Otsu > 0 count: " + str(i))
+    newprint("Max otsu threshold found: " + str(maxOtsu))
+    percentage = maxOtsu / 3 / 255 * 100
+    newprint("equivalent greyscale intensity: " + str(percentage))
+#============================================================
+
+main()  
+newprint(100)
+#newprint("Step 1 complete!\n")
+
+#print ("Goodbye and Good Luck!")

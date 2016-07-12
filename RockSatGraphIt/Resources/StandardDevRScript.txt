@@ -1,0 +1,22 @@
+
+filePath = "D:/Sandbox/step1results.txt"
+#filePath = "__Step1ResultsPath__"
+xLabel = "__XLabel__"
+yLabel = "__YLabel__"
+Title = "__Title__"
+
+maxPixelData <- read.csv(filePath,header=T,sep = ",",colClasses = c("NULL", NA, "NULL"))
+thresholdData <- read.csv(filePath,header=T,sep = ",", colClasses = c("NULL", "NULL", NA))
+
+
+q <- data.matrix(maxPixelData)
+x <- seq(-4,4,length=40)
+m <- dnorm(q, mean = mean(q),sd = sd(q), log=FALSE)
+plot(x,m,pch=1,col=1,main= "Normal Curve of Pixel\nIntensity Across All Images",xlab = "Pixel Intensity",ylab = "Probability")
+
+
+
+#j <- data.matrix(thresholdData)
+#k <- dnorm(j, mean = mean(j),sd = sd(j), log=FALSE)
+#plot(j,k,pch=1,col=2,,xlim = c(0,30), ylim = c(0,0.05), main= "Normal Curve of Pixel\nThreshold Across All Images",xlab = "Threshold value",ylab = "Probability")
+

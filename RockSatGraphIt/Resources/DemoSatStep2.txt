@@ -1,0 +1,46 @@
+import numpy as np
+import pylab
+import mahotas as mh
+import os
+import math
+import sys
+
+def newprint(message):
+    print(message)
+    sys.stdout.flush()
+
+def main():
+    imageDir = "__imageDirectory__"
+    outputDir = "__outputDirectory__"
+    outputFilename = "__outputFilename__"
+    extension = "__imageExtension__"
+    totalFileCount = __totalFileCount__
+    percentCompleteStep = 100.0 / totalFileCount
+
+    newprint("Calculating max pixel count for each image")
+    pylab.gray()
+    filename = open(outputDir + "/" + outputFilename, 'w')
+    filename.write("Images,Max Pixel,Threshold Value\n")
+
+    percentComplete = 0
+    
+    for root, dirs, files in os.walk(imageDir + "/"):
+        for file in files:
+            if file.endswith(extension):
+                
+                ###BEGIN OF MODIFICATIONS FOR APPLICATION USE
+                percentComplete += percentCompleteStep
+                newprint((math.floor(percentComplete)))
+                ###END OF MODIFICATIONS FOR APPLICATION USE
+                
+                RICH = mh.imread(root + "/" + file)
+                filename.write(str(file)+","+str(RICH.max())+"\n")
+                
+                
+                
+    filename.close()
+    newprint(100) 
+#============================================================
+
+main()  
+#print ("Goodbye and Good Luck!")

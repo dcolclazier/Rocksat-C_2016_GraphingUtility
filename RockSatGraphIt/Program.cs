@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using RockSatGraphIt.Forms;
 
 namespace RockSatGraphIt
 {
@@ -16,17 +14,10 @@ namespace RockSatGraphIt
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new GraphitForm());
 
         }
-        private static Version version = new Version(Application.ProductVersion);
 
-        public static Version Version
-        {
-            get
-            {
-                return version;
-            }
-        }
+        public static Version Version { get; } = new Version(Application.ProductVersion);
     }
 }
