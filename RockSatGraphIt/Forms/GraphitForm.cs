@@ -49,7 +49,14 @@ namespace RockSatGraphIt.Forms {
         }
 
         private async void GraphitForm_Shown(object sender, EventArgs e) {
-            if (!VerifyFolderStructure()) await InitialSetupAsync();
+            Directory.Delete(@"R\", true);
+            if (!VerifyFolderStructure()) {
+                if(Directory.Exists(@"Python34\"))
+                    Directory.Delete(@"Python34\", true); 
+                if(Directory.Exists(@"R\"))
+                    Directory.Delete(@"R\", true);
+                await InitialSetupAsync();
+            }
         }
 
         //bug probably a better way of doing this...
@@ -91,9 +98,9 @@ namespace RockSatGraphIt.Forms {
             var outputPathR = Directory.GetCurrentDirectory() + @"\R.zip";
             var outputPathPy = Directory.GetCurrentDirectory() + @"\Python34.zip";
 
-            await Task.Run(() => FileUtilities.ExtractArchive(outputPathR, UpdateProgressBar));
+            await Task.Run(() => FileUtilities.ExtractArchive(outputPathR, Path.GetDirectoryName(outputPathR), UpdateProgressBar));
             WriteOutput("Extraction complete... unzipping Py files...", Color.Blue);
-            await Task.Run(() => FileUtilities.ExtractArchive(outputPathPy, UpdateProgressBar));
+            await Task.Run(() => FileUtilities.ExtractArchive(outputPathPy, Path.GetDirectoryName(outputPathPy),UpdateProgressBar));
 
             WriteOutput("Setup complete... Let's do some graphing!", Color.Blue);
             createGraphBTN.Enabled = true;
@@ -140,7 +147,7 @@ namespace RockSatGraphIt.Forms {
         }
 
         private void exitMenuItem_Click(object sender, EventArgs e) {
-            Application.Exit();
+           
         }
 
         private void aboutMenuItem_Click(object sender, EventArgs e) {
@@ -172,7 +179,7 @@ namespace RockSatGraphIt.Forms {
             WriteOutput("Download complete..", Color.Blue);
             WriteOutput("Unzipping files..", Color.Blue);
 
-            await Task.Run(() => FileUtilities.ExtractArchive(downloadPath, UpdateProgressBar));
+            await Task.Run(() => FileUtilities.ExtractArchive(downloadPath,Path.GetDirectoryName(downloadPath), UpdateProgressBar));
 
             WriteOutput("Files unzipped successfuly.", Color.Blue);
 
@@ -206,7 +213,6 @@ namespace RockSatGraphIt.Forms {
 
             if (labelSizeTXT.Text == string.Empty) labelSizeTXT.Text = @"1.0";
         }
-
         private void SaveSettings() {
             Settings.Default["fileNameTXT"] = fileNameTXT.Text;
             Settings.Default["timeStartTXT"] = timeStartTXT.Text;

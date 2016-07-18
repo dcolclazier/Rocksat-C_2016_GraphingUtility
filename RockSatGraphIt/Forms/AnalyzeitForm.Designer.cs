@@ -138,9 +138,9 @@
             this.consoleRTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.consoleRTB.Location = new System.Drawing.Point(12, 457);
+            this.consoleRTB.Location = new System.Drawing.Point(12, 155);
             this.consoleRTB.Name = "consoleRTB";
-            this.consoleRTB.Size = new System.Drawing.Size(656, 178);
+            this.consoleRTB.Size = new System.Drawing.Size(656, 176);
             this.consoleRTB.TabIndex = 50;
             this.consoleRTB.Text = "";
             // 
@@ -148,7 +148,7 @@
             // 
             this.imagePBAR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.imagePBAR.Location = new System.Drawing.Point(12, 641);
+            this.imagePBAR.Location = new System.Drawing.Point(14, 337);
             this.imagePBAR.Name = "imagePBAR";
             this.imagePBAR.Size = new System.Drawing.Size(654, 13);
             this.imagePBAR.TabIndex = 51;
@@ -217,7 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(680, 666);
+            this.ClientSize = new System.Drawing.Size(680, 362);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.imageExtensionCMB);
             this.Controls.Add(this.label3);

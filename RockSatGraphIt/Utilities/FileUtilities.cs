@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -53,14 +54,15 @@ namespace RockSatGraphIt.Utilities {
 
         }
         
-        public static void ExtractArchive(string zipToUnpack, Action<int> onProgressChanged = null) {
+        public static void ExtractArchive(string zipToUnpack, string unpackDirectory, Action<int> onProgressChanged = null) {
+            
             try {
                 using (var zip = ZipFile.Read(zipToUnpack)) {
                     var step = 100.0/zip.Count;
                     double percentComplete = 0;
                     onProgressChanged?.Invoke(0);
                     foreach (var file in zip) {
-                        file.Extract(Path.GetDirectoryName(zipToUnpack), ExtractExistingFileAction.OverwriteSilently);
+                        file.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
                         percentComplete += step;
                         onProgressChanged((int) Math.Round(percentComplete));
                     }
@@ -101,11 +103,11 @@ namespace RockSatGraphIt.Utilities {
             }
             return 1;
         }
-        public static bool WriteStringToFile(string solutionFilePath, FileMode fileMode, string contents) {
+        public static bool WriteStringToFile(string solutionFilePath, string contents) {
 
             FileStream fs = null;
             try {
-                fs = new FileStream(solutionFilePath, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
+                fs = new FileStream(solutionFilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                 using (TextWriter tw = new StreamWriter(fs)) {
                     fs = null;
                     tw.Write(contents);
@@ -114,6 +116,41 @@ namespace RockSatGraphIt.Utilities {
             }
             catch (Exception e) {
                 MessageBox.Show(e.Message + e.InnerException?.Message, Resources.AlertTitle, MessageBoxButtons.OK);
+                return false;
+            }
+            finally {
+                fs?.Dispose();
+            }
+            return true;
+        }
+        public static bool InsertLineInFile
+            (string filePath, FileMode fileMode, string contents, string lineToFollow) {
+
+            var sb = new StringBuilder();
+            using (var sr = new StreamReader(filePath)) {
+                string line;
+                do {
+                    line = sr.ReadLine();
+                    sb.AppendLine(line);
+
+                } while (line != null && !line.Contains(lineToFollow));
+                sb.Append(contents);
+                sb.Append(sr.ReadToEnd());
+            }
+            
+            FileStream fs = null;
+            try {
+                fs = new FileStream(filePath, fileMode, 
+                    FileAccess.ReadWrite, FileShare.ReadWrite);
+                using (TextWriter tw = new StreamWriter(fs)) {
+                    fs = null;
+                    tw.Write(sb.ToString());
+                    tw.Close();
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.Message + e.InnerException?.Message, 
+                    Resources.AlertTitle, MessageBoxButtons.OK);
                 return false;
             }
             finally {
