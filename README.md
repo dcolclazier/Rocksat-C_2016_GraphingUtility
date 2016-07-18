@@ -1,8 +1,5 @@
 # Rocksat-C_2016_GraphingUtility
 
-Make sure you add R.Zip to the resources directory - too large to be stored on GIT. You can do so by simply downloading/installing
-R and zipping the installation folder. I have not dived into see how small I could make the build.
+Contact me if you want to contribute - you'll need some assets that are too large to include here. 
 
-
-The tool graphs the data from the RockSat-C CC-CO payload. It's a bit too specific as it is to work with any other data, but 
-that should change over time.
+This is a slowly evolving data analysis and graphing utility. In its current state one can graph multiple curves from different csv files to the same graph with various options for labeling and coloring. It also has some basic image analysis software built in, but it is currently extremely specialized to analyze images from a RICH detector or other darkness-based charged particle impact detector.
