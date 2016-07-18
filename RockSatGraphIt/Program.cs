@@ -14,7 +14,7 @@ namespace RockSatGraphIt
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GraphitForm());
+            Application.Run(new NewGraphitForm());
 
         }
 

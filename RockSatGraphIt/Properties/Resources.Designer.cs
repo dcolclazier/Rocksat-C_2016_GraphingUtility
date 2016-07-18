@@ -122,8 +122,7 @@ namespace RockSatGraphIt.Properties {
         ///    imageDir = &quot;__imageDirectory__&quot;
         ///    outputDir = &quot;__outputDirectory__&quot;
         ///    outputFilename = &quot;__outputFilename__&quot;
-        ///    extension = &quot;__imageExtension__&quot;
-        ///    totalFileC [rest of string was truncated]&quot;;.
+        ///    extension = &quot;__imageEx [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DemoSatStep1 {
             get {
@@ -162,7 +161,7 @@ namespace RockSatGraphIt.Properties {
         ///
         ///    newprint(&quot;Calculating max pixel count for each image&quot;)
         ///    pylab.gray()
-        ///    filename = open(outputDi [rest of string was truncated]&quot;;.
+        ///    fil [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DemoSatStep2 {
             get {
@@ -185,6 +184,15 @@ namespace RockSatGraphIt.Properties {
         internal static string DirectoryDoesntExist {
             get {
                 return ResourceManager.GetString("DirectoryDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domain and range bounds must be whole numbers (for now).
+        /// </summary>
+        internal static string DomainRangeError {
+            get {
+                return ResourceManager.GetString("DomainRangeError", resourceCulture);
             }
         }
         
@@ -358,11 +366,9 @@ namespace RockSatGraphIt.Properties {
         ///#clear variables from previous session (dev-use only I think)
         ///rm(list = setdiff(ls(), lsf.str()))
         ///
-        ///cat(&quot;Beginning Graph Creation... Please wait.\n&quot;);
+        ///cat(&quot;Creating graph... This could take a minute or two...\n&quot;);
         ///
-        ///#TWEAKABLE VARIABLES - INPUT
-        ///
-        ///fileName = &quot;__Filename__&quot;   [rest of string was truncated]&quot;;.
+        ///###########TWEAKABLE VARIABLES - OUTPUT!!!!!!!! [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RScriptTemplate {
             get {

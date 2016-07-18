@@ -30,13 +30,12 @@ namespace RockSatGraphIt.Utilities {
         public static bool FixScript(string inputTemplate, string outputFilename, Func<string, string> scriptFixer)
         {
             var scriptContents = scriptFixer(inputTemplate);
-            return FileUtilities.WriteStringToFile(outputFilename, FileMode.Create, scriptContents);
+            return FileUtilities.WriteStringToFile(outputFilename, scriptContents);
         }
         
         public static void ExecuteScript(Form owner, ScriptStartInfo script, bool waitTillFinished) {
             var mre = new ManualResetEvent(false);
-
-
+            
             //Create our process start info
             var editedPath = "\"" + script.ScriptPath + "\" " + script.Args;
 
